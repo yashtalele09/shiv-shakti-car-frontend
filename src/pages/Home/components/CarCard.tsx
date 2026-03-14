@@ -35,10 +35,10 @@ const CarCard = () => {
         </h1>
 
         <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-500 font-inter">Petrol</p>
-          <p className="text-sm text-gray-500 font-inter">Manual</p>
-          <p className="text-sm text-gray-500 font-inter">10,000 KM</p>
-          <p className="text-sm text-gray-500 font-inter">2016</p>
+          <p className="text-sm text-gray-400 font-inter">Petrol</p>
+          <p className="text-sm text-gray-400 font-inter">Manual</p>
+          <p className="text-sm text-gray-400 font-inter">10,000 KM</p>
+          <p className="text-sm text-gray-400 font-inter">2016</p>
         </div>
 
         <div className="flex items-center justify-end">

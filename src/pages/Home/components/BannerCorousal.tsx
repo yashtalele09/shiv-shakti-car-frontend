@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { images } from "../constants";
+import { images, Slogans } from "../constants";
 
 const BannerCorousal = () => {
   const [current, setCurrent] = useState(0);
   const [transition, setTransition] = useState(true);
 
-  const extendedImages = [...images, images[0]]; // clone first image
+  const extendedImages = [...Slogans, Slogans[0]];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -16,33 +16,44 @@ const BannerCorousal = () => {
   }, []);
 
   useEffect(() => {
-    if (current === images.length) {
+    if (current === Slogans.length) {
       setTimeout(() => {
         setTransition(false);
         setCurrent(0);
-      }, 700); // match animation duration
+      }, 700);
 
       setTimeout(() => {
         setTransition(true);
       }, 750);
     }
-  }, [current, images.length]);
+  }, [current]);
 
   return (
-    <div className="w-[95%] h-65 rounded-3xl overflow-hidden relative shadow-[0_6px_10px_rgba(0,0,0,0.4)] bg-gray-500">
+    <div className="w-[95%] h-65 rounded-2xl bg-gray-600 overflow-hidden relative shadow-[0_6px_10px_rgba(0,0,0,0.4)]">
       {/* Image Wrapper */}
       <div
         className={`flex h-full ${
           transition ? "transition-transform duration-700 ease-in-out" : ""
         }`}
         style={{ transform: `translateX(-${current * 100}%)` }}>
-        {extendedImages.map((img, index) => (
-          <img
-            key={index}
-            src={img}
-            alt="banner"
-            className="w-full h-full object-cover flex-shrink-0"
-          />
+        {extendedImages.map((item, index) => (
+          <div key={index} className="relative w-full h-full flex-shrink-0">
+            <img
+              src={item.url}
+              alt="banner"
+              className="w-full h-full object-cover"
+            />
+
+            {/* Text Overlay */}
+            <div className="absolute bottom-10 left-5">
+              <h1 className="text-2xl font-bold text-[#FFD700] drop-shadow-[0_0_5px_rgba(0,0,0,0.6)]">
+                {item.title}
+              </h1>
+              <p className="text-sm mt-2 text-white drop-shadow-[0_0_5px_rgba(0,0,0,0.6)]">
+                {item.subtitle}
+              </p>
+            </div>
+          </div>
         ))}
       </div>
 

@@ -4,7 +4,7 @@ const TypeButtonFilter = () => {
   return (
     <div
       data-no-swipe="true"
-      className="w-full flex flex-nowrap items-center overflow-x-auto gap-3 px-4 rounded-2xl h-20 scroll-smooth touch-pan-x no-scrollbar bg-pink-100">
+      className="w-full flex mt-2 flex-nowrap items-center overflow-x-auto gap-3 px-2 rounded-2xl h-20 scroll-smooth touch-pan-x no-scrollbar bg-pink-100">
       {types.map((type) => (
         <button
           key={type.name}

@@ -1,10 +1,34 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useOutletContext } from "react-router-dom";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import BannerCorousal from "./components/BannerCorousal";
 import HeadComponents from "./components/HeadComponents";
 import TypeButtonFilter from "./components/TypeButtonFilter";
 import CardCorousal from "./components/CardCorousal";
+import BrandButtonsFilters from "./components/BrandButtonsFilters";
+import BrandCarousel from "./components/BeltCorousal";
+import ServicesSection from "./components/ServicesSection";
+import Review from "./components/Review";
+import FAQ from "./components/Faq";
+import { motion, type Variants } from "framer-motion";
+
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
+};
+
+const container = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.15,
+    },
+  },
+};
 
 const Home = () => {
   const { expanded, setExpanded } = useOutletContext<any>();
@@ -32,9 +56,27 @@ const Home = () => {
 
     const distance = startY.current - endY.current;
 
-    if (distance > 50) setExpanded(true);
-    else if (distance < -50) setExpanded(false);
+    // expand
+    if (distance > 50) {
+      setExpanded(true);
+    }
+
+    // collapse only if user is at top
+    else if (distance < -50) {
+      if (sheetRef.current && sheetRef.current.scrollTop <= 0) {
+        setExpanded(false);
+      }
+    }
   };
+
+  useEffect(() => {
+    if (expanded && sheetRef.current) {
+      sheetRef.current.scrollTo({
+        top: 0,
+        behavior: "auto",
+      });
+    }
+  }, [expanded]);
 
   return (
     <div className="w-full pb-15 relative bg-white">
@@ -68,18 +110,55 @@ const Home = () => {
         )} */}
 
         {/* Carousel */}
-        <div
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          animate="visible"
           className={`${
             expanded ? "mt-5" : "mt-0"
           } transition-all flex items-center justify-center duration-300`}>
           <BannerCorousal />
-        </div>
+        </motion.div>
 
         {expanded && (
-          <div className="w-[95%]">
+          <motion.div
+            variants={container}
+            initial="hidden"
+            animate="visible"
+            className="w-[95%]">
+            <motion.h3
+              variants={fadeUp}
+              className="pl-2 text-xl font-inter mt-2 text-gray-500 font-bold">
+              Featured Cars
+            </motion.h3>
             <TypeButtonFilter />
             <CardCorousal />
-          </div>
+            <motion.h3
+              variants={fadeUp}
+              className="pl-2 text-xl font-inter mt-6 text-gray-500 font-bold">
+              Search by Brands
+            </motion.h3>
+            <BrandButtonsFilters />
+            <motion.h1
+              variants={fadeUp}
+              className="pl-2 text-xl font-inter mt-6 text-gray-500 font-bold">
+              Services
+            </motion.h1>
+            <ServicesSection />
+            <motion.h1
+              variants={fadeUp}
+              className="pl-2 text-xl font-inter mt-6 text-gray-500 font-bold">
+              Customers Reviews
+            </motion.h1>
+            <Review />
+            <motion.h1
+              variants={fadeUp}
+              className="pl-2 text-xl font-inter mt-6 text-gray-500 font-bold">
+              FAQ
+            </motion.h1>
+            <FAQ />
+            <BrandCarousel />
+          </motion.div>
         )}
 
         {/* Arrow when collapsed */}

@@ -16,7 +16,7 @@ const MobileLayout = () => {
       </main>
 
       {/* Navbar */}
-      {/* <nav
+      <nav
         className={`fixed z-50 left-0 right-0 h-16 bg-white border-t flex justify-around items-center shadow-lg
         transition-all duration-500
         ${
@@ -27,7 +27,7 @@ const MobileLayout = () => {
         <button className="text-sm font-medium">Home</button>
         <button className="text-sm font-medium">Search</button>
         <button className="text-sm font-medium">Profile</button>
-      </nav> */}
+      </nav>
     </div>
   );
 };
