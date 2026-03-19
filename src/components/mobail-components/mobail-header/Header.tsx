@@ -1,5 +1,5 @@
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import logo from "../../assets/logdumy.png";
+import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
+import logo from "../../../assets/logdumy.png";
 import Search from "./Search";
 
 const Header = ({ expanded }: { expanded: boolean }) => {
@@ -7,7 +7,7 @@ const Header = ({ expanded }: { expanded: boolean }) => {
     <header
       className={`h-15 fixed px-4 w-full z-50 flex items-center transition-all duration-300 ${
         expanded
-          ? "bg-[#FFA1A1]/90 shadow-md justify-center"
+          ? "bg-linear-to-r from-[#FFA1A1] to-[#FFD9A1] shadow-md justify-center"
           : "bg-transparent justify-between"
       }`}>
       {expanded ? (
@@ -22,8 +22,8 @@ const Header = ({ expanded }: { expanded: boolean }) => {
               alt="John Doe"
               className="w-8 h-8"
             />
-            <AvatarFallback className="w-8 h-8 bg-gray-500 text-white">
-              JD
+            <AvatarFallback className="w-10 h-10 bg-gray-500 text-white">
+              DD
             </AvatarFallback>
           </Avatar>
         </>

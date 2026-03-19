@@ -1,5 +1,5 @@
 import { brands } from "../constants";
-
+import { motion } from "framer-motion";
 const BrandCarousel = () => {
   const allBrands = [...brands, ...brands]; // duplicate for smooth loop
 
@@ -26,7 +26,11 @@ const BrandCarousel = () => {
         `}
       </style>
 
-      <div className="w-full overflow-hidden p-4 shadow-2xl mt-4">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full overflow-hidden p-4 shadow-2xl mt-4">
         <div className="flex gap-6 w-max scroll-brands">
           {allBrands.map((brand, index) => (
             <div
@@ -40,7 +44,7 @@ const BrandCarousel = () => {
             </div>
           ))}
         </div>
-      </div>
+      </motion.div>
     </>
   );
 };

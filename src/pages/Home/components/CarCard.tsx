@@ -1,7 +1,10 @@
+import { useState } from "react";
 import Card from "../../../assets/banner.png";
 import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
 
 const CarCard = () => {
+  const [liked, setLiked] = useState(false);
+
   return (
     <div className="h-[90%] rounded-lg w-[70%] bg-white border border-gray-200 shadow-lg shrink-0">
       {/* Image Section */}
@@ -13,8 +16,15 @@ const CarCard = () => {
         />
 
         {/* Like Button */}
-        <button className="absolute top-3 right-3 bg-white/50 p-1 rounded-full shadow hover:bg-white">
-          <Heart size={18} className="text-gray-600 hover:text-red-500" />
+        <button
+          onClick={() => setLiked(!liked)}
+          className="absolute top-3 right-3 bg-white/60 p-1.5 rounded-full shadow hover:bg-white transition">
+          <Heart
+            size={18}
+            className={`transition-all duration-300 ${
+              liked ? "text-red-500 fill-red-500 scale-110" : "text-gray-600"
+            }`}
+          />
         </button>
 
         {/* Left Arrow */}
@@ -30,15 +40,15 @@ const CarCard = () => {
 
       {/* Content Section */}
       <div className="h-[46%] flex flex-col gap-2 px-2">
-        <h1 className="text-md text-gray-900 font-semibold font-inter truncate">
+        <p className="text-md text-[#2e054e] font-semibold font-inter truncate">
           2016 Maruti Suzuki Swift
-        </h1>
+        </p>
 
         <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-400 font-inter">Petrol</p>
-          <p className="text-sm text-gray-400 font-inter">Manual</p>
-          <p className="text-sm text-gray-400 font-inter">10,000 KM</p>
-          <p className="text-sm text-gray-400 font-inter">2016</p>
+          <p className="text-xs text-gray-400 font-inter">Petrol</p>
+          <p className="text-xs text-gray-400 font-inter">Manual</p>
+          <p className="text-xs text-gray-400 font-inter">10,000 KM</p>
+          <p className="text-xs text-gray-400 font-inter">2016</p>
         </div>
 
         <div className="flex items-center justify-end">

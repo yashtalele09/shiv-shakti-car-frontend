@@ -1,4 +1,4 @@
-import Search from "../../../components/mobail-header/Search";
+import Search from "../../../components/mobail-components/mobail-header/Search";
 import car from "../../../assets/cars.jpg";
 
 const HeadComponents = () => {
@@ -21,7 +21,7 @@ const HeadComponents = () => {
           listings with ease.
         </p>
 
-        <button className="w-[40%] bg-black text-white py-2 rounded-full">
+        <button className="w-[40%] bg-linear-to-b from-black/80 to-gray-800/80 text-white py-2 rounded-full">
           Explore Cars
         </button>
       </div>

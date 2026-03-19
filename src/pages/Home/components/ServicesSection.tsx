@@ -1,7 +1,12 @@
 import { services } from "../constants";
+import { motion } from "framer-motion";
 const ServicesSection = () => {
   return (
-    <div className="w-full h-102 flex flex-col bg-pink-100 mt-2 gap-3 shadow-[0_6px_10px_rgba(0,0,0,0.2)] p-4">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="w-full h-102 flex flex-col bg-pink-100 mt-2 gap-3 shadow-[0_6px_10px_rgba(0,0,0,0.2)] p-4">
       <div className="flex items-center w-full h-[30%] justify-between">
         <div className="w-[50%]">
           <p className="text-xs font-inter text-gray-600 text-justify">
@@ -35,7 +40,7 @@ const ServicesSection = () => {
           <img src={services[2]} alt="" className="h-40" />
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

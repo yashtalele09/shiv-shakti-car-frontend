@@ -1,6 +1,6 @@
 import { useState } from "react";
 import review from "../../../assets/car-costomer.png";
-
+import { motion } from "framer-motion";
 const reviews = [
   {
     name: "Rahul Roy",
@@ -33,7 +33,11 @@ const Review = () => {
   };
 
   return (
-    <div className="h-110 px-6 py-4 w-full bg-pink-100 rounded-xl mt-2">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="h-110 px-6 py-4 w-full bg-pink-100 rounded-xl mt-2">
       <div className="w-full h-[98%] rounded-2xl overflow-hidden relative">
         {/* Slider */}
         <div
@@ -110,7 +114,7 @@ const Review = () => {
           ))}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

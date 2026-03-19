@@ -11,6 +11,7 @@ import ServicesSection from "./components/ServicesSection";
 import Review from "./components/Review";
 import FAQ from "./components/Faq";
 import { motion, type Variants } from "framer-motion";
+import MobailFooter from "../../components/mobail-components/mobail-footer/MobailFooter";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 40 },
@@ -79,7 +80,7 @@ const Home = () => {
   }, [expanded]);
 
   return (
-    <div className="w-full pb-15 relative bg-white">
+    <div className="w-full pb-20 relative bg-white">
       {/* Header Content */}
       <div
         className={`transition-all duration-300 ${
@@ -94,7 +95,7 @@ const Home = () => {
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className={`absolute left-0 w-full flex flex-col gap-7 items-center
+        className={`absolute left-0 pb-20 w-full flex flex-col gap-7 items-center
         rounded-t-3xl bg-pink-50 shadow-[0_-6px_10px_rgba(0,0,0,0.3)]
         transition-all duration-500 z-20
         ${expanded ? "top-0 h-screen overflow-y-auto" : "top-[40vh] h-[60vh]"}`}>
@@ -111,9 +112,9 @@ const Home = () => {
 
         {/* Carousel */}
         <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
           className={`${
             expanded ? "mt-5" : "mt-0"
           } transition-all flex items-center justify-center duration-300`}>
