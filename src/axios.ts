@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 
 // import authService from "./lib/services/auth-service";
 import { useLoaderStore } from "./stores/useLoaderStore";
-import type { APIFailureData } from "./typs/shared";
+import type { APIFailureData } from "./types/shared";
 import { TOKEN_KEY } from "./helper/auth";
 
 const baseURL = import.meta.env.VITE_APP_API_URL;

@@ -7,71 +7,103 @@ import {
   MapPin,
 } from "lucide-react";
 
-const MobailFooter = () => {
+const MobileFooter = () => {
+  const links = ["Home", "Browse Cars", "Sell Your Car", "About Us"];
+  const services = [
+    "Car Inspection",
+    "Documentation Help",
+    "Loan Assistance",
+    "Doorstep Delivery",
+  ];
+
   return (
-    <footer className="w-full bg-gradient-to-b from-pink-100 via-pink-200 to-pink-100 border-t border-gray-200 px-4 py-6">
-      <div className="flex flex-col gap-6">
-        {/* Logo / About */}
-        <div className="text-center">
-          <h2 className="text-xl font-bold text-gray-800">CarZone</h2>
-          <p className="text-sm text-gray-600 mt-1">
-            Find the best second-hand cars with trusted service and affordable
-            prices.
-          </p>
+    <footer className="w-full bg-pink-50 border-t-2 border-pink-200 px-6 pt-10 pb-6">
+      {/* Brand */}
+      <div className="mb-8">
+        <div className="flex items-center gap-2 mb-2">
+          <div className="w-1 h-6 bg-pink-500 rounded-full" />
+          <h2 className="text-pink-900 font-bold text-lg tracking-tight">
+            Shiv Shakti Car Bazar
+          </h2>
         </div>
+        <p className="text-pink-500 text-sm leading-relaxed pl-3">
+          Your trusted partner for quality pre-owned vehicles. Transparent
+          pricing, verified cars, and seamless service.
+        </p>
+      </div>
 
-        {/* Quick Links */}
+      {/* Links & Services */}
+      <div className="grid grid-cols-2 gap-6 mb-8">
         <div>
-          <h3 className="font-semibold text-gray-800 mb-2">Quick Links</h3>
-          <div className="flex flex-col text-sm text-gray-600 gap-1">
-            <a href="#">Home</a>
-            <a href="#">Browse Cars</a>
-            <a href="#">Sell Your Car</a>
-            <a href="#">About Us</a>
-          </div>
+          <h3 className="text-pink-400 text-xs font-semibold uppercase tracking-widest mb-3">
+            Quick Links
+          </h3>
+          <ul className="flex flex-col gap-2.5">
+            {links.map((l) => (
+              <li key={l}>
+                <a
+                  href="#"
+                  className="text-pink-700 text-sm hover:text-pink-500 transition-colors duration-150">
+                  {l}
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
-
-        {/* Services */}
         <div>
-          <h3 className="font-semibold text-gray-800 mb-2">Services</h3>
-          <div className="flex flex-col text-sm text-gray-600 gap-1">
-            <p>Car Inspection</p>
-            <p>Documentation Help</p>
-            <p>Car Loan Assistance</p>
-            <p>Doorstep Delivery</p>
+          <h3 className="text-pink-400 text-xs font-semibold uppercase tracking-widest mb-3">
+            Services
+          </h3>
+          <ul className="flex flex-col gap-2.5">
+            {services.map((s) => (
+              <li key={s} className="text-pink-700 text-sm">
+                {s}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {/* Divider */}
+      <div className="h-px bg-pink-200 mb-6" />
+
+      {/* Contact */}
+      <div className="flex flex-col gap-3 mb-6">
+        <h3 className="text-pink-400 text-xs font-semibold uppercase tracking-widest">
+          Contact
+        </h3>
+        {[
+          { Icon: Phone, text: "+91 98765 43210" },
+          { Icon: Mail, text: "support@shivshakti.com" },
+          { Icon: MapPin, text: "Nashik, Maharashtra, India" },
+        ].map(({ Icon, text }) => (
+          <div key={text} className="flex items-center gap-3">
+            <Icon size={14} className="text-pink-400 flex-shrink-0" />
+            <span className="text-pink-700 text-sm">{text}</span>
           </div>
-        </div>
+        ))}
+      </div>
 
-        {/* Contact */}
-        <div>
-          <h3 className="font-semibold text-gray-800 mb-2">Contact</h3>
-          <div className="flex flex-col text-sm text-gray-600 gap-2">
-            <div className="flex items-center gap-2">
-              <Phone size={16} /> <span>+91 98765 43210</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Mail size={16} /> <span>support@carzone.com</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <MapPin size={16} /> <span>India</span>
-            </div>
-          </div>
-        </div>
+      {/* Divider */}
+      <div className="h-px bg-pink-200 mb-5" />
 
-        {/* Social */}
-        <div className="flex justify-center gap-4 text-gray-700">
-          <Facebook size={20} />
-          <Instagram size={20} />
-          <Twitter size={20} />
-        </div>
-
-        {/* Bottom */}
-        <div className="text-center text-xs text-gray-500 border-t pt-3">
-          © {new Date().getFullYear()} CarZone. All rights reserved.
+      {/* Bottom */}
+      <div className="flex items-center justify-between">
+        <p className="text-pink-400 text-xs">
+          © {new Date().getFullYear()} Shiv Shakti Car Bazar
+        </p>
+        <div className="flex items-center gap-3">
+          {[Facebook, Instagram, Twitter].map((Icon, i) => (
+            <button
+              key={i}
+              className="text-pink-300 hover:text-pink-500 transition-colors duration-150">
+              <Icon size={15} />
+            </button>
+          ))}
         </div>
       </div>
     </footer>
   );
 };
 
-export default MobailFooter;
+export default MobileFooter;

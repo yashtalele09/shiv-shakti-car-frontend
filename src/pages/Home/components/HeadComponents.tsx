@@ -1,30 +1,42 @@
 import Search from "../../../components/mobail-components/mobail-header/Search";
 import car from "../../../assets/cars.jpg";
+import { motion } from "framer-motion";
 
 const HeadComponents = () => {
   return (
     <div
-      className="w-full relative h-[42vh] z-0 bg-cover bg-center"
+      className="w-full relative h-[50vh] bg-cover bg-center overflow-hidden"
       style={{ backgroundImage: `url(${car})` }}>
-      {/* overlay gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#FFD9C9]/80 to-[#CDC3FF]/80"></div>
+      {/* Overlay Gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#FFD9C9]/80 via-[#E8D8FF]/70 to-[#CDC3FF]/80 backdrop-blur-[2px]" />
 
-      <div className="w-full px-2 flex flex-col items-center gap-4 absolute top-45 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
-        <Search />
+      {/* Content */}
+      <motion.div
+        initial={{ opacity: 0, y: 25 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="absolute inset-0 z-10 flex flex-col items-center justify-center px-4 text-center gap-4">
+        {/* Search */}
+        <div className="w-full flex items-center justify-center max-w-md">
+          <Search />
+        </div>
 
-        <h1 className="text-[20px] drop-shadow-[0_0_5px_rgba(0,0,0,0.2)] text-[#3B2A5A] font-inter font-semibold">
-          Welcome to Shiv Shakti Car Bazar
+        {/* Heading */}
+        <h1 className="text-[20px] md:text-[24px] font-semibold text-[#2D1E4A] tracking-wide drop-shadow-sm">
+          Shiv Shakti Car Bazar
         </h1>
 
-        <p className="text-[14px] drop-shadow-[0_0_5px_rgba(0,0,0,0.2)] text-[#333333] text-center">
-          Find your dream car at the best price. Buy, sell, and explore verified
-          listings with ease.
+        {/* Subtext */}
+        <p className="text-[13px] md:text-[14px] text-[#4A4A4A] max-w-xs leading-relaxed">
+          Discover your perfect ride at unbeatable prices. Buy, sell, and
+          explore trusted car listings with confidence.
         </p>
 
-        <button className="w-[40%] bg-linear-to-b from-black/80 to-gray-800/80 text-white py-2 rounded-full">
+        {/* CTA Button */}
+        <button className="px-6 py-2 bg-gradient-to-r from-[#2D1E4A] to-[#4B3A73] text-white text-sm font-medium rounded-full shadow-md hover:scale-105 transition-all duration-300">
           Explore Cars
         </button>
-      </div>
+      </motion.div>
     </div>
   );
 };

@@ -9,5 +9,6 @@ export const ROUTES = {
   },
   PRIVATE: {
     PROFILE: "profile",
+    VEHICLE: "vehicle",
   },
 };

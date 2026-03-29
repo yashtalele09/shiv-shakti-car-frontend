@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const faqs = [
   {
@@ -17,43 +18,62 @@ const faqs = [
 ];
 
 const FAQ = () => {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <div className="max-w-2xl mt-5 mx-auto space-y-4">
-      {faqs.map((faq, index) => {
-        const isOpen = openIndex === index;
+    <div className="max-w-3xl mx-auto mt-10 px-4">
+      <div className="space-y-4">
+        {faqs.map((faq, index) => {
+          const isOpen = openIndex === index;
 
-        return (
-          <div
-            key={index}
-            className=" rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-300 bg-white">
-            <button
-              className="flex justify-between items-center w-full text-left"
-              onClick={() => setOpenIndex(isOpen ? null : index)}>
-              <p className="text-blue-500 font-semibold text-sm md:text-base">
-                Q.{index + 1} {faq.question}
-              </p>
-
-              <ChevronDown
-                className={`transition-transform duration-300 ${
-                  isOpen ? "rotate-180 text-blue-500" : "rotate-0"
-                }`}
-              />
-            </button>
-
-            {/* Animated Answer */}
+          return (
             <div
-              className={`overflow-hidden transition-all duration-300 ${
-                isOpen ? "max-h-40 mt-3" : "max-h-0"
+              key={index}
+              className={`rounded-2xl border transition-all duration-300 ${
+                isOpen
+                  ? "bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-300 shadow-md"
+                  : "bg-white border-gray-200 hover:border-blue-200 hover:shadow-sm"
               }`}>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                A. {faq.answer}
-              </p>
+              {/* Question */}
+              <button
+                onClick={() => setOpenIndex(isOpen ? null : index)}
+                className="w-full flex justify-between items-center px-5 py-4">
+                <p
+                  className={`font-semibold text-left text-sm md:text-base ${
+                    isOpen ? "text-blue-600" : "text-gray-800"
+                  }`}>
+                  {faq.question}
+                </p>
+
+                <ChevronDown
+                  className={`transition-all duration-300 ${
+                    isOpen
+                      ? "rotate-180 text-blue-600"
+                      : "rotate-0 text-gray-400"
+                  }`}
+                />
+              </button>
+
+              {/* Answer Animation */}
+              <AnimatePresence initial={false}>
+                {isOpen && (
+                  <motion.div
+                    key="content"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="px-5 overflow-hidden">
+                    <p className="text-gray-600 text-sm pb-4 leading-relaxed">
+                      {faq.answer}
+                    </p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 };

@@ -7,10 +7,10 @@ const MobileLayout = () => {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex flex-col">
       <Header expanded={expanded} />
 
-      <main className="flex-1 pb-30">
+      <main className="flex-1 bg-red-50">
         <Outlet context={{ expanded, setExpanded }} />
       </main>
 

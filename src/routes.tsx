@@ -4,7 +4,7 @@ import SignIn from "./pages/auth/sign-in";
 import Home from "./pages/Home/Index";
 import MobileLayout from "./layout/MobailLayout";
 import Vehicle from "./pages/vehicle";
-import { Contact } from "lucide-react";
+import Contact from "./pages/contact";
 import Profile from "./pages/profile";
 
 const AppRoutes = () => {
