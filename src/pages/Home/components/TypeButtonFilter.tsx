@@ -1,10 +1,13 @@
-import { useState } from "react";
-import { types } from "../constants";
-import { motion } from "framer-motion";
+import { types } from '../constants';
+import { motion } from 'framer-motion';
 
-const TypeButtonFilter = () => {
-  const [activeType, setActiveType] = useState<string | null>(null);
-
+const TypeButtonFilter = ({
+  activeType,
+  setActiveType,
+}: {
+  activeType: string | null;
+  setActiveType: (type: string | null) => void;
+}) => {
   return (
     <div className="w-full">
       {/* Outer wrapper with subtle background */}
@@ -13,14 +16,15 @@ const TypeButtonFilter = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
         data-no-swipe="true"
-        className="relative w-full">
+        className="relative w-full"
+      >
         {/* Left fade edge */}
-        <div className="pointer-events-none absolute left-0 top-0 h-full w-8 z-10 bg-gradient-to-r from-white/80 to-transparent" />
+        <div className="pointer-events-none absolute top-0 left-0 z-10 h-full w-8 bg-gradient-to-r from-white/80 to-transparent" />
         {/* Right fade edge */}
-        <div className="pointer-events-none absolute right-0 top-0 h-full w-8 z-10 bg-gradient-to-l from-white/80 to-transparent" />
+        <div className="pointer-events-none absolute top-0 right-0 z-10 h-full w-8 bg-gradient-to-l from-white/80 to-transparent" />
 
         {/* Scrollable pill track */}
-        <div className="flex items-center gap-2.5 overflow-x-auto scroll-smooth touch-pan-x no-scrollbar py-2 px-1">
+        <div className="no-scrollbar flex touch-pan-x items-center gap-2.5 overflow-x-auto scroll-smooth px-1 py-2">
           {types.map((type, index) => {
             const isActive = activeType === type.name;
             return (
@@ -35,28 +39,21 @@ const TypeButtonFilter = () => {
                   ease: [0.22, 1, 0.36, 1],
                 }}
                 whileTap={{ scale: 0.93 }}
-                className={`
-                  relative flex-shrink-0 h-10 px-4 rounded-full flex items-center gap-2
-                  text-sm font-semibold tracking-wide transition-all duration-300
-                  outline-none select-none group
-                  ${
-                    isActive
-                      ? "bg-gradient-to-br from-rose-400 via-pink-500 to-indigo-600 text-white shadow-lg shadow-pink-300/40"
-                      : "bg-white/70 backdrop-blur-sm border border-gray-200/80 text-gray-500 hover:border-pink-300 hover:text-pink-500 hover:shadow-sm"
-                  }
-                `}>
+                className={`group relative flex h-10 flex-shrink-0 items-center gap-2 rounded-full px-4 text-sm font-semibold tracking-wide transition-all duration-300 outline-none select-none ${
+                  isActive
+                    ? 'bg-gradient-to-br from-[#FF7272] via-[#ff8a5c] to-[#7c3aed] text-white shadow-lg shadow-[#7c3aed]/30'
+                    : 'border border-[#ede8f5] bg-white/70 text-[#8b7aa0] backdrop-blur-sm hover:border-[#c9a8e0] hover:text-[#7c3aed] hover:shadow-sm'
+                } `}
+              >
                 {/* Icon */}
                 {type.icon && (
                   <span
-                    className={`
-                      flex items-center justify-center w-5 h-5 rounded-full
-                      transition-all duration-300
-                      ${isActive ? "opacity-100" : "opacity-60 group-hover:opacity-90"}
-                    `}>
+                    className={`flex h-5 w-5 items-center justify-center rounded-full transition-all duration-300 ${isActive ? 'opacity-100' : 'opacity-60 group-hover:opacity-90'} `}
+                  >
                     <img
                       src={type.icon}
                       alt={type.name}
-                      className="w-4 h-4 object-contain"
+                      className="h-4 w-4 object-contain"
                     />
                   </span>
                 )}
@@ -68,8 +65,8 @@ const TypeButtonFilter = () => {
                 {isActive && (
                   <motion.span
                     layoutId="activeDot"
-                    className="w-1.5 h-1.5 rounded-full bg-white/80"
-                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    className="h-1.5 w-1.5 rounded-full bg-white/80"
+                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                   />
                 )}
               </motion.button>
@@ -86,7 +83,8 @@ const TypeButtonFilter = () => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="mt-1 ml-1 text-xs text-pink-400 font-medium tracking-wide">
+          className="mt-1 ml-1 text-xs font-medium tracking-wide text-[#7c3aed]"
+        >
           Filtering: {activeType}
         </motion.p>
       )}

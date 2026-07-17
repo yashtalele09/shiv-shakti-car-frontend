@@ -1,16 +1,18 @@
-import { useEffect, useRef } from "react";
-import { useOutletContext } from "react-router-dom";
-import { ChevronDown } from "lucide-react";
-import BannerCorousal from "./components/BannerCorousal";
-import HeadComponents from "./components/HeadComponents";
-import TypeButtonFilter from "./components/TypeButtonFilter";
-import CardCorousal from "./components/CardCorousal";
-import BrandButtonsFilters from "./components/BrandButtonsFilters";
-import BrandCarousel from "./components/BeltCorousal";
-import ServicesSection from "./components/ServicesSection";
-import Review from "./components/Review";
-import FAQ from "./components/Faq";
-import { motion, type Variants } from "framer-motion";
+import { useEffect, useRef, useState } from 'react';
+import { useOutletContext } from 'react-router-dom';
+import { ChevronDown } from 'lucide-react';
+import BannerCorousal from './components/BannerCorousal';
+import HeadComponents from './components/HeadComponents';
+import TypeButtonFilter from './components/TypeButtonFilter';
+import CardCorousal from './components/CardCorousal';
+import BrandButtonsFilters from './components/BrandButtonsFilters';
+import BrandCarousel from './components/BeltCorousal';
+import ServicesSection from './components/ServicesSection';
+import Review from './components/Review';
+import FAQ from './components/Faq';
+import { motion, type Variants } from 'framer-motion';
+import useGetFeaturedVehicleMutation from './hooks/useGetFeaturedVehicle';
+import useGetReviewsMutation from './hooks/useGetReviews';
 
 // ─── Animations ─────────────────────────────────────────
 
@@ -33,12 +35,12 @@ const staggerContainer: Variants = {
 // ─── Section Heading ───────────────────────────────────
 
 const SectionHeading = ({ label, accent }: any) => (
-  <div className="flex items-center gap-2 mt-6 mb-2">
-    <span className="w-[3px] h-5 bg-purple-500 rounded-full" />
+  <div className="mt-6 mb-2 flex items-center gap-2">
+    <span className="h-5 w-[3px] rounded-full bg-purple-500" />
     <h2 className="text-sm font-semibold text-[#1a0330]">
       {label}
       {accent && (
-        <span className="ml-2 text-xs text-purple-500 bg-purple-100 px-2 py-0.5 rounded-full">
+        <span className="ml-2 rounded-full bg-purple-100 px-2 py-0.5 text-xs text-purple-500">
           {accent}
         </span>
       )}
@@ -50,6 +52,7 @@ const SectionHeading = ({ label, accent }: any) => (
 
 const Home = () => {
   const { expanded, setExpanded } = useOutletContext<any>();
+  const [selectedType, setSelectedType] = useState<string | null>('All');
   const sheetRef = useRef<HTMLDivElement | null>(null);
 
   const startY = useRef(0);
@@ -81,12 +84,34 @@ const Home = () => {
     }
   }, [expanded]);
 
+  const { mutate: fetchVehicles, data: vehicleData } =
+    useGetFeaturedVehicleMutation({
+      onError: (error) => console.error('Failed to fetch:', error),
+    });
+
+  const { mutate: fetchReviews, data: reviewData } = useGetReviewsMutation({
+    onError: (error) => console.error('Failed to fetch:', error),
+  });
+
+  useEffect(() => {
+    if (expanded) {
+      fetchReviews();
+    }
+  }, [expanded]);
+
+  useEffect(() => {
+    if (expanded) {
+      fetchVehicles({ body_type: selectedType || 'All' });
+    }
+  }, [expanded, selectedType]);
+
   return (
-    <div className="w-full min-h-screen bg-white relative overflow-hidden">
+    <div className="relative min-h-screen w-full overflow-hidden bg-[#FCF5F5]">
       {/* Header */}
       <motion.div
         animate={{ opacity: expanded ? 0 : 1 }}
-        className="relative z-10">
+        className="relative z-10"
+      >
         <HeadComponents />
       </motion.div>
 
@@ -96,33 +121,29 @@ const Home = () => {
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className={`
-          absolute left-0 w-full z-20 flex flex-col items-center
-          rounded-t-[24px]
-          transition-all duration-500 ease-in-out
-          ${
-            expanded
-              ? "top-0 h-screen mt-15 overflow-y-auto"
-              : "top-[42vh] min-h-[58vh]"
-          }
-        `}
+        className={`absolute left-0 z-20 flex w-full flex-col items-center rounded-t-[24px] transition-all duration-500 ease-in-out ${
+          expanded
+            ? 'top-0 mt-15 h-screen overflow-y-auto'
+            : 'top-[42vh] min-h-[58vh]'
+        } `}
         style={{
           background:
-            "linear-gradient(160deg, #fdf4ff 0%, #fce7f3 40%, #f5f0ff 100%)",
-        }}>
+            'linear-gradient(160deg, #fdf4ff 0%, #fce7f3 40%, #f5f0ff 100%)',
+        }}
+      >
         {/* Drag Handle */}
-        <div className="w-10 h-[5px] bg-purple-300 rounded-full mt-3 mb-2" />
+        <div className="mt-3 mb-2 h-[5px] w-10 rounded-full bg-purple-300" />
 
         {/* Banner */}
-        <div className="w-full flex justify-center">
+        <div className="flex w-full justify-center">
           <BannerCorousal />
         </div>
 
         {/* Collapsed Hint */}
         {!expanded && (
-          <div className="flex flex-col items-center mt-3 mb-4">
+          <div className="mt-3 mb-4 flex flex-col items-center">
             <p className="text-xs text-purple-400">Swipe up to explore</p>
-            <ChevronDown className="text-purple-400 mt-1 animate-bounce" />
+            <ChevronDown className="mt-1 animate-bounce text-purple-400" />
           </div>
         )}
 
@@ -132,11 +153,18 @@ const Home = () => {
             variants={staggerContainer}
             initial="hidden"
             animate="visible"
-            className="w-[95%] pb-10">
+            className="w-[95%] pb-10"
+          >
             <motion.div variants={fadeUp}>
               <SectionHeading label="Featured Cars" accent="New" />
-              <TypeButtonFilter />
-              <CardCorousal />
+              <TypeButtonFilter
+                activeType={selectedType}
+                setActiveType={setSelectedType}
+              />
+              <CardCorousal
+                vehicles={vehicleData?.vehicleData || []}
+                selectedType={selectedType}
+              />
             </motion.div>
 
             <motion.div variants={fadeUp}>
@@ -151,7 +179,7 @@ const Home = () => {
 
             <motion.div variants={fadeUp}>
               <SectionHeading label="Customer Reviews" accent="⭐" />
-              <Review />
+              <Review reviews={reviewData?.data?.reviews || []} />
             </motion.div>
 
             <motion.div variants={fadeUp}>

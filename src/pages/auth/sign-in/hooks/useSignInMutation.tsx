@@ -1,11 +1,11 @@
-import { AxiosError } from "axios";
-import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from 'axios';
+import { useMutation } from '@tanstack/react-query';
 import type {
   SignInAPIInputT,
   SignInAPISuccessResponseT,
-} from "../../../../typs/auth/sign-in/post";
-import authService from "../../../../lib/services/auth-service";
-import type { APIFailureData } from "../../../../typs/shared";
+} from '../../../../typs/auth/sign-in/post';
+import authService from '../../../../lib/services/auth-service';
+import type { APIFailureData } from '../../../../typs/shared';
 
 type UseSignUpMutationOptions = {
   onSuccess?: (data: SignInAPISuccessResponseT) => void;
@@ -21,8 +21,8 @@ export const useSignInMutation = (options?: UseSignUpMutationOptions) => {
     },
     onError: (error: AxiosError<APIFailureData>) => {
       options?.onError?.({
-        error: error.response?.data?.error || "Something went wrong",
-        message: error.response?.data?.message || "Something went wrong",
+        error: error.response?.data?.error || 'Something went wrong',
+        message: error.response?.data?.message || 'Something went wrong',
       });
     },
   });

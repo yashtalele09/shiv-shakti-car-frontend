@@ -1,21 +1,29 @@
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { auth } from "../../utils/firebase";
-import { useGoogleSignInMutation } from "../../hooks/googleMutation";
-import { setAuthToken, setUserData } from "../../helper/auth";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { motion } from "framer-motion";
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { auth } from '../../utils/firebase';
+import { useGoogleSignInMutation } from '../../hooks/googleMutation';
+import useAuthStore from '../../store/authStore';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { motion } from 'framer-motion';
 
 const GoogleAuth = () => {
   const navigate = useNavigate();
   const provider = new GoogleAuthProvider();
+  const login = useAuthStore((s) => s.login);
 
   const googleMutation = useGoogleSignInMutation({
     onSuccess: (data) => {
-      setUserData(data.user);
-      setAuthToken(data.token);
-      toast.success("Google Sign In Successful");
-      navigate("/");
+      login(
+        {
+          id: data.user.id,
+          name: data.user.name,
+          email: data.user.email,
+          phone: data.user.phone || '',
+        },
+        data.token
+      );
+      toast.success('Google Sign In Successful');
+      navigate('/');
     },
   });
 
@@ -26,7 +34,7 @@ const GoogleAuth = () => {
 
       googleMutation.mutate({ idToken });
     } catch (error) {
-      toast.error("Google Sign In Failed");
+      toast.error('Google Sign In Failed');
     }
   };
 
@@ -35,9 +43,10 @@ const GoogleAuth = () => {
       whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.96 }}
       onClick={handleGoogleLogin}
-      className="w-full h-[60px] bg-transparent flex flex-row items-center justify-center gap-2 shadow-[0_4px_8px_rgba(0,0,0,0.2)] text-2xl font-inter font-medium rounded-full border-2 border-white flex-col">
-      <img src="/google-logo.png" alt="Google" className="w-6 h-6" />
-      <p className="text-lg text-white drop-shadow-[0_0_5px_rgba(0,0,0,0.2)] font-medium">
+      className="font-inter flex h-[60px] w-full flex-col flex-row items-center justify-center gap-2 rounded-full border-2 border-white bg-transparent text-2xl font-medium shadow-[0_4px_8px_rgba(0,0,0,0.2)]"
+    >
+      <img src="/google-logo.png" alt="Google" className="h-6 w-6" />
+      <p className="text-lg font-medium text-white drop-shadow-[0_0_5px_rgba(0,0,0,0.2)]">
         Sign up with Google
       </p>
     </motion.button>

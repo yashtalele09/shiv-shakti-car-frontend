@@ -1,17 +1,17 @@
-import { z } from "zod";
+import { z } from 'zod';
 import {
   emailRegexGenerate,
   nameRegexGenerate,
   passwordRegexGenerate,
   phoneRegexGenerate,
-} from "../../../../validations";
+} from '../../../../validations';
 
 export const SignUpSchema = z
   .object({
     name: z
       .string()
-      .regex(nameRegexGenerate("Please enter a valid Full name", 2, 50).regex, {
-        message: nameRegexGenerate("Please enter a valid Full name", 2, 50)
+      .regex(nameRegexGenerate('Please enter a valid Full name', 2, 50).regex, {
+        message: nameRegexGenerate('Please enter a valid Full name', 2, 50)
           .message,
       }),
     email: z
@@ -26,8 +26,8 @@ export const SignUpSchema = z
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
   });
 
 export type SignUpFormData = z.infer<typeof SignUpSchema>;

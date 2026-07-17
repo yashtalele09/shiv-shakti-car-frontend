@@ -1,50 +1,18 @@
-import type { UserT } from "../../typs/auth/sign-up/post";
-export const TOKEN_KEY = "user_token";
-export const USER_DATA_KEY = "user_data";
-
-/* -------------------------
-   Authentication
--------------------------- */
-
-export const isAuthenticated = (): boolean => {
-  const token = getAuthToken();
-  return !!token;
-};
-
-/* -------------------------
-   Token
--------------------------- */
-
-export const setAuthToken = (token: string): void => {
-  localStorage.setItem(TOKEN_KEY, token);
-};
+import useAuthStore from '../../store/authStore';
+import type { AuthUser } from '../../store/authStore';
 
 export const getAuthToken = (): string | null => {
-  return localStorage.getItem(TOKEN_KEY);
+  return useAuthStore.getState().token;
 };
 
-/* -------------------------
-   User Data
--------------------------- */
-
-export const getUserData = (): UserT | null => {
-  const data = localStorage.getItem(USER_DATA_KEY);
-  return data ? JSON.parse(data) : null;
+export const isAuthenticated = (): boolean => {
+  return useAuthStore.getState().isAuthenticated;
 };
 
-export const setUserData = (data: UserT): void => {
-  localStorage.setItem(USER_DATA_KEY, JSON.stringify(data));
+export const getUserData = (): AuthUser | null => {
+  return useAuthStore.getState().user;
 };
-
-export const removeUserData = (): void => {
-  localStorage.removeItem(USER_DATA_KEY);
-};
-
-/* -------------------------
-   Clear All Auth
--------------------------- */
 
 export const clearAuth = (): void => {
-  localStorage.removeItem(TOKEN_KEY);
-  localStorage.removeItem(USER_DATA_KEY);
+  useAuthStore.getState().logout();
 };

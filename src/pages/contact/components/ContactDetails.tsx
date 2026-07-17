@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
-import { Mail, Phone, MessageCircle } from "lucide-react";
+import { motion } from 'framer-motion';
+import { Mail, Phone, MessageCircle } from 'lucide-react';
 
 interface ContactCardProps {
   icon: any;
@@ -10,19 +10,20 @@ interface ContactCardProps {
 
 const ContactCard = ({ icon: Icon, title, value, link }: ContactCardProps) => {
   return (
-    <div className="w-full p-4 rounded-xl bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
+    <div className="w-full rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition-all duration-300 hover:shadow-md">
       <div className="flex items-center gap-3">
-        <div className="p-2 rounded-full bg-[#f3e8ff] text-[#7c3aed]">
+        <div className="rounded-full bg-[#f3e8ff] p-2 text-[#7c3aed]">
           <Icon size={20} />
         </div>
-        <p className="text-md text-[#2e054e] font-semibold">{title}</p>
+        <p className="text-md font-semibold text-[#2e054e]">{title}</p>
       </div>
 
       <div className="mt-3 text-center">
         {link ? (
           <a
             href={link}
-            className="text-gray-600 hover:text-[#7c3aed] transition-colors">
+            className="text-gray-600 transition-colors hover:text-[#7c3aed]"
+          >
             {value}
           </a>
         ) : (
@@ -39,12 +40,13 @@ const ContactDetails = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="w-[95%] mx-auto mt-6 bg-gradient-to-b from-[#FFD5D5] to-[#F1E6F9] shadow-2xl border border-gray-200 p-6 rounded-2xl">
-      <p className="text-left text-xl text-white font-bold drop-shadow-md">
+      className="mx-auto mt-6 w-[95%] rounded-2xl border border-gray-200 bg-gradient-to-b from-[#FFD5D5] to-[#F1E6F9] p-6 shadow-2xl"
+    >
+      <p className="text-left text-xl font-bold text-white drop-shadow-md">
         Contact Details
       </p>
 
-      <div className="w-full flex flex-col gap-4 mt-6">
+      <div className="mt-6 flex w-full flex-col gap-4">
         <ContactCard
           icon={Mail}
           title="Email"

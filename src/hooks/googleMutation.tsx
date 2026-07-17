@@ -1,7 +1,7 @@
-import { useMutation } from "@tanstack/react-query";
-import authService from "../lib/services/auth-service";
-import type { APIFailureData } from "../typs/shared/index";
-import type { SignUpAPISuccessResponseT } from "../typs/auth/sign-up/post";
+import { useMutation } from '@tanstack/react-query';
+import authService from '../lib/services/auth-service';
+import type { APIFailureData } from '../typs/shared/index';
+import type { SignUpAPISuccessResponseT } from '../typs/auth/sign-up/post';
 
 type UseGoogleSignInOptions = {
   onSuccess?: (data: SignUpAPISuccessResponseT) => void;

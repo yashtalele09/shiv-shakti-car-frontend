@@ -1,65 +1,84 @@
-import { ListFilter, X, ChevronDown, SlidersHorizontal } from "lucide-react";
-import { useState, useRef, useEffect, useCallback } from "react";
-import { createPortal } from "react-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { X, ChevronDown, SlidersHorizontal, ListFilter } from 'lucide-react';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import type { VehicleDataT } from '../../../typs/vehicle/get';
 
 interface VehicleFilterProps {
   onOpen: () => void;
   selectedFilters: string[];
   onRemove: (filter: string) => void;
+  onSelect: (filter: string) => void;
+  vehicleData?: VehicleDataT[];
 }
-
-const filterOptions = {
-  name: ["Swift", "i20", "Fortuner", "Creta", "Baleno"],
-  brand: ["Maruti", "Hyundai", "Toyota", "Honda", "Tata"],
-  color: ["Red", "Black", "White", "Silver", "Blue"],
-};
 
 const VehicleFilter = ({
   onOpen,
   selectedFilters,
   onRemove,
+  onSelect,
+  vehicleData,
 }: VehicleFilterProps) => {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [isSticky, setIsSticky] = useState(false);
   const [dropdownPos, setDropdownPos] = useState<{
     top: number;
     left: number;
+    width: number;
   } | null>(null);
   const buttonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
-  // Scroll detection
+  const filterOptions: Record<string, string[]> = {
+    Name: [...new Set(vehicleData?.map((v) => v.vehicle_model))],
+    Brand: [...new Set(vehicleData?.map((v) => v.vehicle_brand))],
+    Color: [...new Set(vehicleData?.map((v) => v.vehicle_color))],
+    Transmission: [...new Set(vehicleData?.map((v) => v.transmission_type))],
+    Variant: [...new Set(vehicleData?.map((v) => v.body_type))],
+  };
+
+  // Scroll detection for FAB
   useEffect(() => {
     const handleScroll = () => setIsSticky(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  // Prevent background scroll when dropdown open
-  useEffect(() => {
-    document.body.style.overflow = openDropdown ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [openDropdown]);
 
   // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = () => setOpenDropdown(null);
-    window.addEventListener("click", handleClickOutside);
-    return () => window.removeEventListener("click", handleClickOutside);
+    window.addEventListener('click', handleClickOutside);
+    return () => window.removeEventListener('click', handleClickOutside);
   }, []);
+
+  // Reposition open dropdown on scroll (horizontal scroll of chip bar)
+  useEffect(() => {
+    if (!openDropdown) return;
+    const el = buttonRefs.current[openDropdown];
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    let left = rect.left;
+    // Clamp to viewport
+    const panelWidth = 176;
+    if (left + panelWidth > window.innerWidth - 8) {
+      left = window.innerWidth - panelWidth - 8;
+    }
+    setDropdownPos({ top: rect.bottom + 6, left, width: panelWidth });
+  }, [openDropdown]);
 
   const toggleDropdown = useCallback((key: string) => {
     setOpenDropdown((prev) => {
       const next = prev === key ? null : key;
       if (next) {
-        const rect = buttonRefs.current[key]?.getBoundingClientRect();
-        if (rect)
-          setDropdownPos({
-            top: rect.bottom + 6,
-            left: rect.left + rect.width / 2,
-          });
+        const el = buttonRefs.current[key];
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          const panelWidth = 176;
+          let left = rect.left;
+          if (left + panelWidth > window.innerWidth - 8) {
+            left = window.innerWidth - panelWidth - 8;
+          }
+          setDropdownPos({ top: rect.bottom + 6, left, width: panelWidth });
+        }
       }
       return next;
     });
@@ -69,122 +88,174 @@ const VehicleFilter = ({
     <>
       {/* ── FILTER BAR ── */}
       <motion.div
-        initial={{ opacity: 0, y: -12 }}
+        initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        className="relative flex items-center gap-2.5 px-4 py-2.5 border-b border-gray-100 bg-white overflow-x-auto no-scrollbar whitespace-nowrap"
-        style={{ fontFamily: "'DM Sans', sans-serif" }}>
-        {/* ── Primary Filter Button ── */}
-        <motion.button
-          whileTap={{ scale: 0.95 }}
-          onClick={onOpen}
-          className="group flex items-center gap-2 bg-[#FF7272] text-white px-4 py-1.5 rounded-full text-sm font-semibold shrink-0 shadow-[0_2px_10px_rgba(255,114,114,0.35)] hover:bg-[#ff5a5a] transition-colors duration-200">
-          <SlidersHorizontal
-            size={14}
-            className="transition-transform duration-200 group-hover:rotate-12"
-          />
-          Filter
-        </motion.button>
-
-        {/* ── Divider ── */}
-        <div className="h-5 w-px bg-gray-200 shrink-0" />
-
-        {/* ── Dropdown Chips ── */}
-        {Object.keys(filterOptions).map((key, i) => (
-          <motion.div
-            key={key}
-            initial={{ opacity: 0, x: -8 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.05 * i, duration: 0.3 }}>
-            <button
-              ref={(el) => {
-                buttonRefs.current[key] = el;
+        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+        style={{ fontFamily: "'DM Sans', sans-serif" }}
+        className="relative border-b border-gray-100 bg-white"
+      >
+        {/* ROW 1: Filter button + chips */}
+        <div className="flex items-center">
+          {/* sticky left */}
+          <div
+            className="sticky left-0 z-10 flex shrink-0 items-center gap-2 bg-white"
+            style={{
+              padding: '10px 10px 10px 14px',
+              borderRight: '1px solid #f3f4f6',
+            }}
+          >
+            <motion.button
+              whileTap={{ scale: 0.94 }}
+              onClick={onOpen}
+              className="flex shrink-0 items-center gap-1.5 rounded-full bg-[#FF7272] text-[13px] font-semibold text-white transition-colors duration-200 hover:bg-[#ff5a5a]"
+              style={{
+                padding: '6px 14px',
+                boxShadow: '0 2px 10px rgba(255,114,114,0.32)',
               }}
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleDropdown(key);
-              }}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[13px] font-medium shrink-0 border transition-all duration-200
-                ${
-                  openDropdown === key
-                    ? "border-[#FF7272] bg-[#fff0f0] text-[#FF7272] shadow-[0_0_0_3px_rgba(255,114,114,0.12)]"
-                    : "border-gray-200 bg-white text-gray-600 hover:border-[#FF7272] hover:text-[#FF7272]"
-                }`}>
-              {key.charAt(0).toUpperCase() + key.slice(1)}
-              <motion.span
-                animate={{ rotate: openDropdown === key ? 180 : 0 }}
-                transition={{ duration: 0.2 }}
-                className="inline-flex">
-                <ChevronDown size={13} />
-              </motion.span>
-            </button>
-          </motion.div>
-        ))}
+            >
+              <SlidersHorizontal size={13} />
+              Filter
+            </motion.button>
+          </div>
 
-        {/* ── Selected Filter Tags ── */}
+          {/* scrollable chips only */}
+          <div
+            className="flex items-center gap-2 overflow-x-auto"
+            style={{
+              flex: 1,
+              padding: '10px 14px 10px 10px',
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+            }}
+          >
+            {Object.keys(filterOptions).map((key, i) => (
+              <motion.div
+                key={key}
+                initial={{ opacity: 0, x: -6 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.04 * i, duration: 0.25 }}
+              >
+                <button
+                  ref={(el) => {
+                    buttonRefs.current[key] = el;
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleDropdown(key);
+                  }}
+                  className={`flex shrink-0 items-center gap-1.5 rounded-full border text-[13px] font-medium transition-all duration-200 ${
+                    openDropdown === key
+                      ? 'border-[#FF7272] bg-[#fff0f0] text-[#FF7272]'
+                      : 'border-gray-200 bg-white text-gray-600 hover:border-[#FF7272] hover:text-[#FF7272]'
+                  }`}
+                  style={{
+                    padding: '5px 13px',
+                    boxShadow:
+                      openDropdown === key
+                        ? '0 0 0 3px rgba(255,114,114,0.10)'
+                        : 'none',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {key}
+                  <motion.span
+                    animate={{ rotate: openDropdown === key ? 180 : 0 }}
+                    transition={{ duration: 0.18 }}
+                    className="inline-flex"
+                  >
+                    <ChevronDown size={12} />
+                  </motion.span>
+                </button>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* ROW 2: Selected tags — only rendered when there are selections */}
         <AnimatePresence>
-          {selectedFilters.map((filter) => (
+          {selectedFilters.length > 0 && (
             <motion.div
-              key={filter}
-              initial={{ opacity: 0, scale: 0.8, x: -8 }}
-              animate={{ opacity: 1, scale: 1, x: 0 }}
-              exit={{ opacity: 0, scale: 0.75, x: 8 }}
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.2 }}
-              className="flex items-center gap-1.5 bg-[#fff0f0] text-[#FF7272] border border-[#ffc6c6] px-3 py-1 rounded-full text-[12px] font-medium shrink-0">
-              {filter}
-              <button
-                onClick={() => onRemove(filter)}
-                className="hover:bg-[#FF7272] hover:text-white rounded-full p-0.5 transition-colors duration-150">
-                <X size={10} strokeWidth={2.5} />
-              </button>
+              className="flex flex-wrap items-center gap-2"
+              style={{ padding: '8px 14px', borderTop: '1px solid #f3f4f6' }}
+            >
+              {selectedFilters.map((filter) => (
+                <motion.div
+                  key={filter}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.75 }}
+                  transition={{ duration: 0.18 }}
+                  className="flex shrink-0 items-center gap-1.5 rounded-full border border-[#ffc6c6] bg-[#fff0f0] text-[12px] font-medium text-[#FF7272]"
+                  style={{ padding: '4px 10px' }}
+                >
+                  {filter}
+                  <button
+                    onClick={() => onRemove(filter)}
+                    className="flex items-center justify-center rounded-full transition-colors duration-150 hover:bg-[#FF7272] hover:text-white"
+                    style={{ padding: 2 }}
+                  >
+                    <X size={10} strokeWidth={2.5} />
+                  </button>
+                </motion.div>
+              ))}
             </motion.div>
-          ))}
+          )}
         </AnimatePresence>
       </motion.div>
 
-      {/* ── PORTAL DROPDOWN ── */}
+      {/* ── PORTAL DROPDOWN — opens below the chip button ── */}
       {openDropdown &&
         dropdownPos &&
         createPortal(
           <AnimatePresence>
             <motion.div
               key={openDropdown}
-              initial={{ opacity: 0, y: -6, scale: 0.96 }}
+              initial={{ opacity: 0, y: -4, scale: 0.97 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -4, scale: 0.97 }}
-              transition={{ duration: 0.18, ease: "easeOut" }}
+              transition={{ duration: 0.16, ease: 'easeOut' }}
               onClick={(e) => e.stopPropagation()}
               style={{
-                position: "fixed",
+                position: 'fixed',
                 top: dropdownPos.top,
                 left: dropdownPos.left,
-                transform: "translateX(-50%)",
+                width: dropdownPos.width,
                 zIndex: 9999,
                 fontFamily: "'DM Sans', sans-serif",
+                boxShadow: '0 8px 24px rgba(0,0,0,0.10)',
+                maxHeight: 220,
               }}
-              className="bg-white rounded-xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-gray-100 p-1.5 w-44 max-h-52 overflow-y-auto">
-              {filterOptions[openDropdown as keyof typeof filterOptions].map(
-                (item, i) => (
-                  <motion.div
-                    key={item}
-                    initial={{ opacity: 0, x: -6 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.03 }}
-                    onClick={() => setOpenDropdown(null)}
-                    className="group flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer hover:bg-[#fff0f0] transition-colors duration-150">
-                    <span className="w-1.5 h-1.5 rounded-full bg-gray-200 group-hover:bg-[#FF7272] transition-colors duration-150 shrink-0" />
-                    <span className="text-[13px] text-gray-700 group-hover:text-[#FF7272] font-medium transition-colors duration-150">
-                      {item}
-                    </span>
-                  </motion.div>
-                ),
-              )}
+              className="overflow-y-auto rounded-xl border border-gray-100 bg-white"
+            >
+              {filterOptions[openDropdown].map((item, i) => (
+                <motion.div
+                  key={item}
+                  initial={{ opacity: 0, x: -4 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.025 }}
+                  onClick={() => {
+                    onSelect(item);
+                    setOpenDropdown(null);
+                  }}
+                  className="group flex cursor-pointer items-center gap-2 rounded-lg transition-colors duration-150 hover:bg-[#fff0f0]"
+                  style={{ padding: '7px 12px', margin: '2px 4px' }}
+                >
+                  <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gray-200 transition-colors duration-150 group-hover:bg-[#FF7272]" />
+                  <span className="text-[13px] font-medium text-gray-700 transition-colors duration-150 group-hover:text-[#FF7272]">
+                    {item}
+                  </span>
+                </motion.div>
+              ))}
             </motion.div>
           </AnimatePresence>,
-          document.body,
+          document.body
         )}
 
-      {/* ── FLOATING FAB ── */}
+      {/* ── FLOATING FAB (appears on scroll) ── */}
       <AnimatePresence>
         {isSticky && (
           <motion.button
@@ -193,12 +264,16 @@ const VehicleFilter = ({
             exit={{ opacity: 0, scale: 0.7, y: 20 }}
             whileHover={{ scale: 1.08 }}
             whileTap={{ scale: 0.93 }}
-            transition={{ type: "spring", stiffness: 400, damping: 22 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 22 }}
             onClick={onOpen}
-            className="fixed right-5 bottom-20 z-50 bg-[#FF7272] text-white p-4 rounded-full shadow-[0_4px_20px_rgba(255,114,114,0.45)]">
+            className="fixed right-5 bottom-20 z-50 rounded-full bg-[#FF7272] text-white"
+            style={{
+              padding: 16,
+              boxShadow: '0 4px 20px rgba(255,114,114,0.4)',
+            }}
+          >
             <ListFilter size={22} />
-            {/* Pulse ring */}
-            <span className="absolute inset-0 rounded-full bg-[#FF7272] animate-ping opacity-20 pointer-events-none" />
+            <span className="pointer-events-none absolute inset-0 animate-ping rounded-full bg-[#FF7272] opacity-20" />
           </motion.button>
         )}
       </AnimatePresence>

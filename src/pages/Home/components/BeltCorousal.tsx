@@ -1,40 +1,41 @@
-import { brands } from "../constants";
-import { motion } from "framer-motion";
+import { brands } from '../constants';
+import { motion } from 'framer-motion';
 
 const BrandCarousel = () => {
   const allBrands = [...brands, ...brands, ...brands];
 
   return (
-    <section className="w-full py-16 bg-gradient-to-b from-[#fff1f5] via-[#ffe4ec] to-[#fff] overflow-hidden">
+    <section className="w-full overflow-hidden bg-gradient-to-b from-[#fff1f5] via-[#ffe4ec] to-[#fff] py-16">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center mb-12 px-4">
-        <p className="text-xs tracking-[0.25em] uppercase text-pink-400 mb-3">
-          Trusted by industry leaders
+        className="mb-12 px-4 text-center"
+      >
+        <p className="mb-3 text-xs tracking-[0.25em] text-pink-400 uppercase">
+          Trusted by top car brands
         </p>
 
-        <h2 className="text-2xl md:text-3xl font-semibold text-gray-800 leading-snug">
-          Powering teams at the world’s <br />
-          <span className="text-pink-400">most ambitious companies</span>
+        <h2 className="text-2xl leading-snug font-semibold text-gray-800 md:text-3xl">
+          Shiv Shakti Car Bazar — <br />
+          <span className="text-pink-400">
+            your destination for buying &amp; selling cars
+          </span>
         </h2>
       </motion.div>
 
       {/* Row 1 */}
-      <div className="relative overflow-hidden mb-4">
+      <div className="relative mb-4 overflow-hidden">
         {/* Fade edges */}
-        <div className="absolute left-0 top-0 h-full w-24 bg-gradient-to-r from-[#fff1f5] to-transparent z-10" />
-        <div className="absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-[#fff1f5] to-transparent z-10" />
+        <div className="absolute top-0 left-0 z-10 h-full w-24 bg-gradient-to-r from-[#fff1f5] to-transparent" />
+        <div className="absolute top-0 right-0 z-10 h-full w-24 bg-gradient-to-l from-[#fff1f5] to-transparent" />
 
-        <div className="flex gap-4 w-max animate-scrollLeft hover:[animation-play-state:paused]">
+        <div className="animate-scrollLeft flex w-max gap-4 hover:[animation-play-state:paused]">
           {allBrands.map((brand, i) => (
             <div
               key={i}
-              className="w-[130px] h-[70px] flex items-center justify-center 
-              rounded-xl border border-pink-100 bg-white shadow-sm
-              hover:shadow-lg hover:shadow-pink-200/50
-              transition-all duration-300 hover:scale-[1.05] hover:-translate-y-1">
+              className="flex h-[70px] w-[130px] items-center justify-center rounded-xl border border-pink-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:scale-[1.05] hover:shadow-lg hover:shadow-pink-200/50"
+            >
               <img
                 src={brand.logo}
                 alt={brand.name}
@@ -47,17 +48,15 @@ const BrandCarousel = () => {
 
       {/* Row 2 */}
       <div className="relative overflow-hidden">
-        <div className="absolute left-0 top-0 h-full w-24 bg-gradient-to-r from-[#fff1f5] to-transparent z-10" />
-        <div className="absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-[#fff1f5] to-transparent z-10" />
+        <div className="absolute top-0 left-0 z-10 h-full w-24 bg-gradient-to-r from-[#fff1f5] to-transparent" />
+        <div className="absolute top-0 right-0 z-10 h-full w-24 bg-gradient-to-l from-[#fff1f5] to-transparent" />
 
-        <div className="flex gap-4 w-max animate-scrollRight hover:[animation-play-state:paused]">
+        <div className="animate-scrollRight flex w-max gap-4 hover:[animation-play-state:paused]">
           {[...allBrands].reverse().map((brand, i) => (
             <div
               key={i}
-              className="w-[130px] h-[70px] flex items-center justify-center 
-              rounded-xl border border-pink-100 bg-white shadow-sm
-              hover:shadow-lg hover:shadow-pink-200/50
-              transition-all duration-300 hover:scale-[1.05] hover:-translate-y-1">
+              className="flex h-[70px] w-[130px] items-center justify-center rounded-xl border border-pink-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:scale-[1.05] hover:shadow-lg hover:shadow-pink-200/50"
+            >
               <img
                 src={brand.logo}
                 alt={brand.name}
@@ -73,20 +72,21 @@ const BrandCarousel = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.4 }}
-        className="flex justify-center items-center gap-10 mt-12 flex-wrap">
+        className="mt-12 flex flex-wrap items-center justify-center gap-10"
+      >
         {[
-          { value: "500+", label: "Companies" },
-          { value: "98%", label: "Satisfaction" },
-          { value: "40M+", label: "Users served" },
+          { value: '1000+', label: 'Cars Sold' },
+          { value: '29', label: 'Years in Business' },
+          { value: '10,000+', label: 'Happy Customers' },
         ].map((stat, i) => (
           <div key={i} className="flex items-center gap-8">
-            {i !== 0 && <div className="w-1 h-1 rounded-full bg-pink-300" />}
+            {i !== 0 && <div className="h-1 w-1 rounded-full bg-pink-300" />}
 
             <div className="text-center">
               <p className="text-xl font-semibold text-gray-800">
                 {stat.value}
               </p>
-              <p className="text-[10px] tracking-[0.15em] uppercase text-pink-400">
+              <p className="text-[10px] tracking-[0.15em] text-pink-400 uppercase">
                 {stat.label}
               </p>
             </div>

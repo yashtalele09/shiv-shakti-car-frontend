@@ -1,5 +1,5 @@
-import AppRoutes from "./routes";
-import { BrowserRouter } from "react-router-dom";
+import AppRoutes from './routes';
+import { BrowserRouter } from 'react-router-dom';
 
 const App = () => {
   return (
@@ -9,4 +9,4 @@ const App = () => {
   );
 };
 
-export default App; 
+export default App;

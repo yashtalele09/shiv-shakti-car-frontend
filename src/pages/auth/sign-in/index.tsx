@@ -1,5 +1,5 @@
-import { useResponsive } from "../../../hooks/useResponsive";
-import MobileSignInView from "./view/MobailSignInView";
+import { useResponsive } from '../../../hooks/useResponsive';
+import MobileSignInView from './view/MobailSignInView';
 
 const SignIn = () => {
   const { isMobile } = useResponsive();

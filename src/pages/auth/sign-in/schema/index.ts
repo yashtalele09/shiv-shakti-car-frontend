@@ -1,8 +1,8 @@
-import { z } from "zod";
+import { z } from 'zod';
 import {
   emailRegexGenerate,
   passwordRegexGenerate,
-} from "../../../../validations";
+} from '../../../../validations';
 
 export const SignInSchema = z.object({
   email: z
