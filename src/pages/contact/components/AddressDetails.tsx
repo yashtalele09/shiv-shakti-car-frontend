@@ -2,7 +2,7 @@ import { MapPin, ExternalLink } from 'lucide-react';
 
 const AddressDetails = () => {
   return (
-    <div className="mx-auto mt-6 w-[95%] rounded-2xl border border-gray-200 bg-gradient-to-b from-[#FFD5D5] to-[#F1E6F9] p-6 shadow-2xl">
+    <div className="mx-auto mt-6 w-[95%] rounded-2xl border border-gray-200 bg-gradient-to-br from-[#FFD9C9] to-[#CDC3FF] p-6 shadow-2xl">
       {/* Heading */}
       <p className="flex items-center gap-2 text-left text-xl font-bold text-white drop-shadow-md">
         Address Details

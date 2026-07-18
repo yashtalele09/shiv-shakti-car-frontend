@@ -68,6 +68,7 @@ const Header = ({
             src={logo}
             alt="logo"
             className="h-15 w-20 object-contain drop-shadow-sm"
+            onClick={() => navigate('/')}
           />
           <div className="h-5 w-[1px] bg-gray-300" />
         </div>
@@ -76,10 +77,10 @@ const Header = ({
         <div className="flex items-center gap-2">
           {isAuthenticated && (
             <>
-              <button className="relative flex h-9 w-9 items-center justify-center rounded-lg text-gray-600 transition hover:bg-red-100 hover:text-red-500">
+              {/* <button className="relative flex h-9 w-9 items-center justify-center rounded-lg text-gray-600 transition hover:bg-red-100 hover:text-red-500">
                 <span className="absolute top-1 right-1 h-2 w-2 animate-ping rounded-full bg-red-500" />
-                <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500" />
-                <svg
+                <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500" /> */}
+              {/* <svg
                   width="18"
                   height="18"
                   viewBox="0 0 24 24"
@@ -89,9 +90,9 @@ const Header = ({
                 >
                   <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
                   <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-                </svg>
-              </button>
-              <div className="mx-1 h-5 w-[1px] bg-gray-300" />
+                </svg> */}
+              {/* </button>
+              <div className="mx-1 h-5 w-[1px] bg-gray-300" /> */}
             </>
           )}
 
@@ -133,6 +134,7 @@ const Header = ({
         src={logo}
         alt="logo"
         className="h-15 w-20 shrink-0 object-contain drop-shadow-sm"
+        onClick={() => navigate('/')}
       />
 
       {/* Search area */}

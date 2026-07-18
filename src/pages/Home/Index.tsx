@@ -13,6 +13,7 @@ import FAQ from './components/Faq';
 import { motion, type Variants } from 'framer-motion';
 import useGetFeaturedVehicleMutation from './hooks/useGetFeaturedVehicle';
 import useGetReviewsMutation from './hooks/useGetReviews';
+import MobailFooter from '../../components/mobail-components/mobail-footer/MobailFooter';
 
 // ─── Animations ─────────────────────────────────────────
 
@@ -190,6 +191,8 @@ const Home = () => {
             <motion.div variants={fadeUp} className="mt-4">
               <BrandCarousel />
             </motion.div>
+
+            {expanded && <MobailFooter />}
           </motion.div>
         )}
       </div>

@@ -9,7 +9,7 @@ const Header = () => {
       className="flex h-60 w-full items-center bg-gradient-to-b from-[#FFA1A1] to-[#AD93DE]"
     >
       <div className="px-6 md:px-12">
-        <p className="text-4xl font-bold text-white drop-shadow-md md:text-5xl">
+        <p className="text-4xl leading-snug font-bold text-white drop-shadow-md md:text-5xl">
           Contact Us
         </p>
 

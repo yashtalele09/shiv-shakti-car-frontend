@@ -23,10 +23,11 @@ const Vehicle = () => {
 
   const isInitialLoadRef = useRef(true);
   const loadingMoreRef = useRef(false);
-  const hasUserScrolledRef = useRef(false); // ← NEW: gate for real scroll
+  const hasUserScrolledRef = useRef(false);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchQuery = searchParams.get('search') || '';
 
   const { mutate: fetchVehicles, isPending } = useGetAllVehicleMutation({
     onSuccess: (data: any, variables: any) => {
@@ -106,9 +107,13 @@ const Vehicle = () => {
           (params as any)[key] = values.join(',');
         }
       }
+      // preserve an active text search alongside pill filters
+      if (searchQuery) {
+        params.search = searchQuery;
+      }
       return params;
     },
-    [masterData]
+    [masterData, searchQuery]
   );
 
   const fetchPage = useCallback(
@@ -118,9 +123,13 @@ const Vehicle = () => {
     [fetchVehicles]
   );
 
-  // ── Initial fetch: first 8 cards ──
+  // ── Initial fetch: honors a ?search= param present on first load ──
   useEffect(() => {
-    fetchPage(1, {});
+    const initialSearch = searchParams.get('search');
+    fetchPage(1, initialSearch ? { search: initialSearch } : {});
+    if (initialSearch) {
+      setApiFilters({ search: initialSearch });
+    }
   }, []);
 
   // ── Filters changed → reset to page 1 and refetch ──
@@ -128,11 +137,18 @@ const Vehicle = () => {
     if (isInitialLoadRef.current) return;
     setDisplayData([]);
     setHasMore(true);
-    hasUserScrolledRef.current = false; // reset scroll-gate on new filter set
+    hasUserScrolledRef.current = false;
     fetchPage(1, apiFilters);
   }, [apiFilters]);
 
-  // ── Track real user scroll so auto-triggering can't happen on mount ──
+  // ── Search param changed (user searched again from Header while already here) ──
+  useEffect(() => {
+    if (isInitialLoadRef.current) return;
+    setFilters([]); // a fresh text search clears pill filters
+    setApiFilters(searchQuery ? { search: searchQuery } : {});
+  }, [searchQuery]);
+
+  // ── Track real user scroll ──
   useEffect(() => {
     const onScroll = () => {
       if (window.scrollY > 50) {
@@ -143,7 +159,7 @@ const Vehicle = () => {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // ── Infinite scroll: load next 8 only after the user has actually scrolled ──
+  // ── Infinite scroll ──
   useEffect(() => {
     const el = sentinelRef.current;
     if (!el) return;
@@ -155,7 +171,7 @@ const Vehicle = () => {
           hasMore &&
           !isPending &&
           !loadingMoreRef.current &&
-          hasUserScrolledRef.current // ← the actual fix
+          hasUserScrolledRef.current
         ) {
           loadingMoreRef.current = true;
           fetchPage(page + 1, apiFilters);
@@ -182,6 +198,11 @@ const Vehicle = () => {
     setApiFilters(buildApiParams(next));
   };
 
+  const clearSearch = () => {
+    searchParams.delete('search');
+    setSearchParams(searchParams);
+  };
+
   if (isPending && isInitialLoad) return <CarLoader />;
 
   return (
@@ -191,6 +212,17 @@ const Vehicle = () => {
       transition={{ duration: 0.5 }}
       className="min-h-screen pt-18"
     >
+      {searchQuery && (
+        <div className="flex items-center justify-between px-4 pt-2 pb-1 text-sm text-gray-600">
+          <span>
+            Search results for <strong>&ldquo;{searchQuery}&rdquo;</strong>
+          </span>
+          <button onClick={clearSearch} className="text-red-500 underline">
+            Clear
+          </button>
+        </div>
+      )}
+
       <VehicleFilter
         onOpen={() => setIsOpen(true)}
         selectedFilters={filters}

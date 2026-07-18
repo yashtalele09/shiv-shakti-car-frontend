@@ -26,9 +26,9 @@ const InquiryForm = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="mx-auto mt-[-50px] w-[95%] rounded-2xl border border-gray-200 bg-gradient-to-b from-[#FFD5D5] to-[#F1E6F9] p-6 shadow-2xl"
+      className="mx-auto mt-[-50px] w-[95%] rounded-2xl border border-gray-200 bg-gradient-to-br from-[#FFD9C9] to-[#CDC3FF] p-6 shadow-2xl"
     >
-      <p className="text-left text-2xl font-bold text-white drop-shadow-md">
+      <p className="text-left text-xl font-bold text-white drop-shadow-md">
         Inquiry Form
       </p>
 
@@ -46,7 +46,7 @@ const InquiryForm = () => {
         </div>
 
         <div className="mt-2 w-full text-center">
-          <button className="h-11 w-full rounded-full bg-[#FFA1A1] text-lg font-semibold text-white shadow-md transition-all hover:bg-[#ff8c8c] active:scale-95 md:w-1/2">
+          <button className="h-11 w-full rounded-full bg-[#FF7272] text-lg font-semibold text-white shadow-md transition-all hover:bg-[#ff8c8c] active:scale-95 md:w-1/2">
             Inquire Now
           </button>
         </div>

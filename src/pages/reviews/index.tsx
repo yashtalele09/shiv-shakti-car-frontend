@@ -69,7 +69,7 @@ const ReviewsPage = () => {
 
   return (
     <>
-      <section className="mt-15 min-h-screen w-full bg-gray-50 px-4 pb-28">
+      <section className="mt-15 min-h-screen w-full bg-[#FFF5F7] px-4 pb-28">
         {/* Page Header */}
         <div className="mb-6 pt-6">
           <p className="mb-1 font-sans text-[10px] font-semibold tracking-[0.15em] text-orange-500 uppercase">
