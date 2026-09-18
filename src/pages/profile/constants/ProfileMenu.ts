@@ -1,4 +1,15 @@
-import { Heart, MessageSquare, Phone } from 'lucide-react';
+import {
+  Heart,
+  MessageSquare,
+  Phone,
+  LayoutDashboard,
+  Clock3,
+  FileText,
+  Car,
+  Bell,
+  HelpCircle,
+  User,
+} from 'lucide-react';
 import type { MenuItem } from '../types/Profile';
 
 export const MENU_ITEMS: MenuItem[] = [
@@ -35,3 +46,44 @@ export const staggerVariants = {
     },
   },
 };
+
+export const mainItems = [
+  {
+    label: 'Overview',
+    icon: LayoutDashboard,
+  },
+  {
+    label: 'Saved Cars',
+    icon: Heart,
+    count: 12,
+  },
+  {
+    label: 'Recently Viewed',
+    icon: Clock3,
+  },
+  {
+    label: 'My Enquiries',
+    icon: FileText,
+    count: 8,
+  },
+  {
+    label: 'My Listings',
+    icon: Car,
+    count: 2,
+  },
+];
+
+export const accountItems = [
+  {
+    label: 'Edit Profile',
+    icon: User,
+  },
+  {
+    label: 'Notifications',
+    icon: Bell,
+  },
+  {
+    label: 'Help & Support',
+    icon: HelpCircle,
+  },
+];

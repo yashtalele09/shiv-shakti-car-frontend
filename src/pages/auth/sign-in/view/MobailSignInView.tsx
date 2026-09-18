@@ -196,8 +196,9 @@ const MobileSignInView = () => {
               </label>
               <button
                 type="button"
-                className="text-xs font-semibold text-blue-200 transition-colors hover:text-white"
+                className="text-xs font-semibold text-blue-400 transition-colors hover:text-white"
                 style={{ textShadow: '0 1px 4px rgba(0,0,0,0.15)' }}
+                onClick={() => navigate(ROUTES.AUTH.FORGOT_PASSWORD)}
               >
                 Forgot Password?
               </button>

@@ -28,7 +28,12 @@ const Header = ({
       .toUpperCase()
       .slice(0, 2);
 
-  const hideHeaderRoutes = ['/profile', '/vehicle-details', '/verify-otp'];
+  const hideHeaderRoutes = [
+    '/profile',
+    '/vehicle-details',
+    '/verify-otp',
+    '/forgot-password',
+  ];
   const isVehicleDetailsPage = location.pathname.startsWith('/vehicle/');
   const shouldHideCompletely =
     hideHeaderRoutes.includes(location.pathname) || isVehicleDetailsPage;

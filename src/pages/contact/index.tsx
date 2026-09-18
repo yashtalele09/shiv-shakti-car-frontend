@@ -1,22 +1,10 @@
-import { motion } from 'framer-motion';
-import Header from './components/Header';
-import InquiryForm from './components/InquiryForm';
-import ContactDetails from './components/ContactDetails';
-import AddressDetails from './components/AddressDetails';
-const Contact = () => {
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className="min-h-screen pt-15"
-    >
-      <Header />
-      <InquiryForm />
-      <ContactDetails />
-      <AddressDetails />
-    </motion.div>
-  );
+import { useResponsive } from '../../hooks/useResponsive';
+import DesktopeView from './views/DesktopView';
+import MobileContactView from './views/MobileContactView';
+
+const ContactPage = () => {
+  const { isMobile } = useResponsive();
+  return <div>{isMobile ? <MobileContactView /> : <DesktopeView />}</div>;
 };
 
-export default Contact;
+export default ContactPage;

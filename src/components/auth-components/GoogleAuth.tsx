@@ -43,10 +43,10 @@ const GoogleAuth = () => {
       whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.96 }}
       onClick={handleGoogleLogin}
-      className="font-inter flex h-[60px] w-full flex-col flex-row items-center justify-center gap-2 rounded-full border-2 border-white bg-transparent text-2xl font-medium shadow-[0_4px_8px_rgba(0,0,0,0.2)]"
+      className="font-inter flex h-[60px] w-full flex-col flex-row items-center justify-center gap-2 rounded-full border-2 border-white bg-transparent text-2xl font-medium shadow-[0_4px_8px_rgba(0,0,0,0.2)] md:border-gray-400"
     >
       <img src="/google-logo.png" alt="Google" className="h-6 w-6" />
-      <p className="text-lg font-medium text-white drop-shadow-[0_0_5px_rgba(0,0,0,0.2)]">
+      <p className="text-lg font-medium text-white drop-shadow-[0_0_5px_rgba(0,0,0,0.2)] md:text-gray-800">
         Sign up with Google
       </p>
     </motion.button>
