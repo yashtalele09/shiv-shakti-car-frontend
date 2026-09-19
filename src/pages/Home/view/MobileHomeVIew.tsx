@@ -85,9 +85,15 @@ const Home = () => {
     }
   }, [expanded]);
 
+  const [isVehiclesLoading, setIsVehiclesLoading] = useState(true);
+
   const { mutate: fetchVehicles, data: vehicleData } =
     useGetFeaturedVehicleMutation({
-      onError: (error) => console.error('Failed to fetch:', error),
+      onSuccess: () => setIsVehiclesLoading(false),
+      onError: (error) => {
+        setIsVehiclesLoading(false);
+        console.error('Failed to fetch:', error);
+      },
     });
 
   const { mutate: fetchReviews, data: reviewData } = useGetReviewsMutation({
@@ -102,12 +108,13 @@ const Home = () => {
 
   useEffect(() => {
     if (expanded) {
+      setIsVehiclesLoading(true);
       fetchVehicles({ body_type: selectedType || 'All' });
     }
   }, [expanded, selectedType]);
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-[#FCF5F5]">
+    <div className="relative h-dvh w-full overflow-hidden bg-[#FCF5F5]">
       {/* Header */}
       <motion.div
         animate={{ opacity: expanded ? 0 : 1 }}
@@ -124,9 +131,9 @@ const Home = () => {
         onTouchEnd={handleTouchEnd}
         className={`absolute left-0 z-20 flex w-full flex-col items-center rounded-t-[24px] transition-all duration-500 ease-in-out ${
           expanded
-            ? 'top-0 mt-15 h-screen overflow-y-auto'
-            : 'top-[42vh] min-h-[58vh]'
-        } `}
+            ? 'top-0 mt-15 h-[calc(100%-3.75rem)] overflow-y-auto'
+            : 'top-[42%] h-[58%] overflow-hidden'
+        }`}
         style={{
           background:
             'linear-gradient(160deg, #fdf4ff 0%, #fce7f3 40%, #f5f0ff 100%)',
@@ -164,7 +171,8 @@ const Home = () => {
               />
               <CardCorousal
                 vehicles={vehicleData?.vehicleData || []}
-                selectedType={selectedType}
+                selectedType={selectedType || ''}
+                isLoading={isVehiclesLoading}
               />
             </motion.div>
 

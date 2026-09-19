@@ -135,7 +135,55 @@ const ViewAllCard = ({ selectedType }: { selectedType?: string }) => {
   );
 };
 
-const CardCarousel = ({ vehicles, selectedType }: any) => {
+const CarCardSkeleton = () => {
+  return (
+    <div className="w-44 flex-shrink-0 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
+      {/* Image placeholder */}
+      <div className="relative h-28 w-full overflow-hidden bg-gray-200">
+        <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/60 to-transparent" />
+      </div>
+
+      {/* Text placeholders */}
+      <div className="space-y-2 p-3">
+        <div className="h-3.5 w-3/4 animate-pulse rounded bg-gray-200" />
+        <div className="h-3 w-1/2 animate-pulse rounded bg-gray-200" />
+        <div className="flex items-center justify-between pt-1">
+          <div className="h-3 w-10 animate-pulse rounded bg-gray-200" />
+          <div className="h-3 w-10 animate-pulse rounded bg-gray-200" />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const CardCarouselLoading = () => {
+  return (
+    <div className="w-full py-3">
+      <style>
+        {`
+          @keyframes shimmer {
+            100% { transform: translateX(100%); }
+          }
+        `}
+      </style>
+      <div className="flex gap-3 overflow-x-auto pb-2">
+        {[...Array(4)].map((_, i) => (
+          <CarCardSkeleton key={i} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const CardCarousel = ({
+  vehicles,
+  selectedType,
+  isLoading = false,
+}: {
+  vehicles: any;
+  selectedType?: string;
+  isLoading?: boolean;
+}) => {
   const formatPrice = (price: number) => {
     if (price >= 10000000) {
       return `₹ ${(price / 10000000).toFixed(2)} Cr`;
@@ -145,6 +193,11 @@ const CardCarousel = ({ vehicles, selectedType }: any) => {
       return `₹ ${price.toLocaleString('en-IN')}`;
     }
   };
+
+  // Show skeleton loaders while data is being fetched
+  if (isLoading) {
+    return <CardCarouselLoading />;
+  }
 
   if (!vehicles || vehicles.length === 0) {
     return (

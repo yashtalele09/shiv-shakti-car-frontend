@@ -18,7 +18,7 @@ const MobileLayout = () => {
     <div className="flex flex-col">
       <Header expanded={expanded} isHomePage={isHomePage} />
 
-      <main className="bg-[#FCF5F5] pb-20">
+      <main className="bg-[#FCF5F5]">
         <Outlet context={{ expanded, setExpanded }} />
       </main>
 
