@@ -1,73 +1,191 @@
-# React + TypeScript + Vite
+# Shri Shivshakti Car Bazar — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A pre-owned car marketplace platform built for **Shri Shivshakti Car Bazar**, a family-run dealership business. The platform lists used cars for browsing, searching, and filtering, helping build a direct relationship between buyers and the dealer. Users can explore vehicle details, filter cars based on their preferences, and contact the owner directly for inquiries.
 
-Currently, two official plugins are available:
+🔗 **Live Demo:** [shiv-shakti-car-frontend-staging-lovat.vercel.app](https://shiv-shakti-car-frontend-staging-lovat.vercel.app/)
+🔗 **Backend Repo:** [shiv-shakti-car-Backend](https://github.com/yashtalele09/shiv-shakti-car-Backend)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## ✨ Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Authentication
+- Sign in / Sign up
+- Email verification
+- Forget password flow
+- Firebase authentication via Google
 
-## Expanding the ESLint configuration
+### Core Marketplace
+- Browse pre-owned cars
+- Search and advanced vehicle filtering (personalized results based on user preference)
+- Like / favorite vehicles
+- Vehicle details page
+- Vehicle inquiry system (contact the owner directly)
+- Featured vehicle section
+- Vehicle image gallery
+- Service section
+- Review section — users can add reviews
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### User Experience
+- Responsive design for mobile, tablet, and desktop
+- User profile and dashboard
+- Optimized API data fetching and caching
+- Vehicle and page interaction tracking
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 🛠️ Tech Stack
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+### Frontend
+- React (TypeScript)
+- Tailwind CSS
+- Zustand
+- TanStack Query
+- React Router
+- Framer Motion
+- Lucide React
+- Zod
+- JWT
+- Axios
+- npm
+- React Toastify
+
+### Authentication & Services
+- Firebase
+- Resend (email)
+- Redis
+- Cloudinary
+
+### Deployment
+- Vercel
+
+---
+
+## 📁 Project Structure
+
+```
+src/
+├── assets/
+├── components/
+├── constants/
+├── helper/
+├── hooks/
+├── layout/
+├── lib/
+├── pages/
+├── store/
+├── stores/
+├── types/
+├── utils/
+├── validations/
+├── App.tsx
+├── axios.ts
+├── index.css
+├── main.tsx
+└── routes.tsx
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
+## 🚀 Getting Started
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+**1. Clone the repository**
+
+```bash
+git clone https://github.com/yashtalele09/shiv-shakti-car-frontend.git
 ```
+
+**2. Navigate to the project**
+
+```bash
+cd shiv-shakti-car-frontend
+```
+
+**3. Install dependencies**
+
+```bash
+npm install
+```
+
+**4. Configure environment variables**
+
+Create a `.env` file in the root directory:
+
+```
+VITE_APP_API_URL=https://shiv-shakti-car-backend-staging.onrender.com
+```
+
+Add any other required environment variables used by the project.
+
+**5. Start the development server**
+
+```bash
+npm run dev
+```
+
+The application will run locally using the Vite development server.
+
+---
+
+## 🏗️ Build for Production
+
+```bash
+npm run build
+```
+
+---
+
+## 🔄 Application Flow
+
+```
+User
+  │
+  ▼
+React Frontend
+  │
+  ├── Authentication ──► Firebase
+  │
+  ├── API Requests ────► Node.js / Express Backend
+  │                          │
+  │                          ▼
+  │                      MongoDB
+  │
+  ├── Images ──────────► Cloudinary
+  │
+  └── Email Services ──► Resend
+```
+
+---
+
+## 📱 Responsive Design
+
+The application is designed to work across:
+
+- Desktop
+- Laptop
+- Tablet
+- Mobile devices
+
+with custom hooks handling responsive behavior.
+
+---
+
+## 🚀 Deployment
+
+The frontend is deployed using **Vercel**. Production deployment is connected to the GitHub repository, allowing changes to be deployed through the CI/CD workflow.
+
+---
+
+## 👤 Author
+
+**Yash Talele**
+B.Tech Computer Science Engineer
+
+- GitHub: [github.com/yashtalele09](https://github.com/yashtalele09)
+- LinkedIn: [linkedin.com/in/yash-talele-0665b722b](https://www.linkedin.com/in/yash-talele-0665b722b/)
+
+---
+
+## 📄 License
+
+This project is proprietary and built for Shri Shivshakti Car Bazar.

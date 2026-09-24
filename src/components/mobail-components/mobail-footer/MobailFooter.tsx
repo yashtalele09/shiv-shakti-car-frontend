@@ -25,16 +25,16 @@ const MobailFooter = () => {
   const legal = ['Privacy Policy', 'Terms of Service', 'Refund Policy'];
 
   const contact = [
-    { Icon: Phone, text: '+91 98765 43210', href: 'tel:+919876543210' },
+    { Icon: Phone, text: '+91 9422279478', href: 'tel:+919422279478' },
     {
       Icon: Mail,
-      text: 'shivshakticarbaza@gmail.com',
-      href: 'mailto:shivshakticarbazar@gmail.com',
+      text: 'shivshakticarbazar@rediffmail.com',
+      href: 'mailto:shivshakticarbazar@rediffmail.com',
     },
     {
       Icon: MapPin,
-      text: 'Trimbak Road, Nashik, Maharashtra 422101',
-      href: 'https://maps.google.com/?q=Nashik+Maharashtra',
+      text: '2J37+33J, Jalgaon, Manyar Khede, Maharashtra 425003',
+      href: 'https://maps.google.com/?q=Shiv Shakti Car Bazar+ Manyar Khede +Jalgaon+Maharashtra',
     },
     { Icon: Clock, text: 'Mon-Sat, 10:00 AM - 8:00 PM', href: null },
   ];
