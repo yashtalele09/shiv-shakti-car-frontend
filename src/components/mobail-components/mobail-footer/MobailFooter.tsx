@@ -36,7 +36,7 @@ const MobailFooter = () => {
       text: '2J37+33J, Jalgaon, Manyar Khede, Maharashtra 425003',
       href: 'https://maps.google.com/?q=Shiv Shakti Car Bazar+ Manyar Khede +Jalgaon+Maharashtra',
     },
-    { Icon: Clock, text: 'Mon-Sat, 10:00 AM - 8:00 PM', href: null },
+    { Icon: Clock, text: 'Mon-Sat, 9:30 AM - 7:00 PM', href: null },
   ];
 
   const socials = [

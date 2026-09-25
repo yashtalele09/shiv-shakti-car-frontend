@@ -1,5 +1,13 @@
-import { authInstance } from '../../axios';
-import type { InquiryPayloadT, InquiryResponseT, InquiryListResponseT } from '../../typs/inquiry';
+import { authInstance, instance } from '../../axios';
+import type {
+  InquiryPayloadT,
+  InquiryResponseT,
+  InquiryListResponseT,
+  SendOtpPayloadT,
+  VerifyOtpPayloadT,
+  VerifyOtpResponseT,
+  SendOtpResponseT,
+} from '../../typs/inquiry';
 
 const inquiryService = {
   addInquiry: async (data: InquiryPayloadT): Promise<InquiryResponseT> => {
@@ -10,6 +18,18 @@ const inquiryService = {
   getInquiry: async (): Promise<InquiryListResponseT> => {
     const response = await authInstance.get('/inquiry/get-inquiry');
     return response.data;
+  },
+
+  sendOtp: async (payload: SendOtpPayloadT): Promise<SendOtpResponseT> => {
+    const { data } = await instance.post('/inquiry/send-otp', payload);
+    return data;
+  },
+
+  verifyOtp: async (
+    payload: VerifyOtpPayloadT
+  ): Promise<VerifyOtpResponseT> => {
+    const { data } = await instance.post('/inquiry/verify-otp', payload);
+    return data;
   },
 };
 export default inquiryService;

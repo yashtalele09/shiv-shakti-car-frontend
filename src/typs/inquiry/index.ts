@@ -1,4 +1,5 @@
 export type InquiryPayloadT = {
+  userId: string;
   name: string;
   email: string;
   phone: string;
@@ -30,3 +31,20 @@ export type InquiryListResponseT = {
     totalPages: number;
   };
 };
+export interface SendOtpPayloadT {
+  email: string;
+}
+
+export interface SendOtpResponseT {
+  message: string;
+}
+
+export interface VerifyOtpPayloadT {
+  email: string;
+  otp: string;
+}
+
+export interface VerifyOtpResponseT {
+  message: string;
+  verified: boolean;
+}

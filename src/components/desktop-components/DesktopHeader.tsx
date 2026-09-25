@@ -84,7 +84,7 @@ const Header = () => {
       className="fixed top-0 left-0 z-50 flex w-full flex-col"
     >
       {/* Main bar */}
-      <div className="relative flex h-20 items-center justify-between border-b border-white/20 bg-white/10 px-8 shadow-[0_2px_20px_-4px_rgba(99,60,220,0.15)] backdrop-blur-2xl backdrop-saturate-150">
+      <div className="relative flex h-20 items-center justify-between border-b border-white/20 bg-white px-8 shadow-[0_2px_20px_-4px_rgba(99,60,220,0.15)] backdrop-blur-2xl backdrop-saturate-150">
         {/* subtle rainbow hairline under the bar */}
         <div className="absolute inset-x-0 bottom-0 h-[2px] bg-gradient-to-r from-indigo-500 via-fuchsia-400 to-amber-400" />
 
@@ -114,11 +114,7 @@ const Header = () => {
                     whileHover={{ y: -1 }}
                     whileTap={{ scale: 0.95 }}
                     className={`relative overflow-hidden rounded-full px-5 py-2 text-sm font-semibold tracking-tight transition-colors duration-200 ${
-                      isActive
-                        ? 'text-white shadow-md'
-                        : isHome
-                          ? 'text-white'
-                          : 'text-gray-400'
+                      isActive ? 'text-white shadow-md' : 'text-gray-400'
                     }`}
                   >
                     {isActive && (
@@ -167,7 +163,7 @@ const Header = () => {
           )}
         </div>
       </div>
-      <div className="hidden h-9 items-center justify-between overflow-hidden border-b border-white/10 bg-indigo-950/40 px-8 backdrop-blur-xl lg:flex">
+      <div className="hidden h-9 items-center justify-between overflow-hidden border-b border-white/10 bg-indigo-950 px-8 backdrop-blur-xl lg:flex">
         <div className="flex items-center gap-1.5 text-xs font-medium text-violet-200">
           <Sparkles size={12} className="text-amber-300" />
           <span>Trusted pre-owned cars, inspected &amp; verified</span>

@@ -1,3 +1,4 @@
+import { showToast } from '../utils/toast';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -25,7 +26,10 @@ const useAuthStore = create<AuthState>()(
 
       login: (user, token) => set({ user, token, isAuthenticated: true }),
 
-      logout: () => set({ user: null, token: null, isAuthenticated: false }),
+      logout: () => {
+        set({ user: null, token: null, isAuthenticated: false });
+        showToast.success('Logout successfully');
+      },
     }),
     {
       name: 'auth-storage', // persists to localStorage automatically

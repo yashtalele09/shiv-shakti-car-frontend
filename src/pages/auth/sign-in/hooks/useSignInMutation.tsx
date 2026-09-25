@@ -6,6 +6,7 @@ import type {
 } from '../../../../typs/auth/sign-in/post';
 import authService from '../../../../lib/services/auth-service';
 import type { APIFailureData } from '../../../../typs/shared';
+import { showToast } from '../../../../utils/toast';
 
 type UseSignUpMutationOptions = {
   onSuccess?: (data: SignInAPISuccessResponseT) => void;
@@ -18,12 +19,14 @@ export const useSignInMutation = (options?: UseSignUpMutationOptions) => {
       authService.signIn(data),
     onSuccess: (data: SignInAPISuccessResponseT) => {
       options?.onSuccess?.(data);
+      showToast.success(data.message || 'Login successfully');
     },
     onError: (error: AxiosError<APIFailureData>) => {
       options?.onError?.({
         error: error.response?.data?.error || 'Something went wrong',
         message: error.response?.data?.message || 'Something went wrong',
       });
+      showToast.error(error.response?.data?.message || 'Something went wrong');
     },
   });
 };

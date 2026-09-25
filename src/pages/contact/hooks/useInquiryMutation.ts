@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { toast } from 'react-toastify';
+import { showToast } from '../../../utils/toast';
 import { AxiosError } from 'axios';
 import inquiryService from '../../../lib/services/inquiry-service';
 import type { APIFailureData } from '../../../typs/shared';
@@ -13,13 +13,13 @@ export const useSubmitInquiry = () => {
   >({
     mutationFn: inquiryService.addInquiry,
     onSuccess: (response) => {
-      toast.success(response.message || 'Inquiry submitted successfully');
+      showToast.success(response.message || 'Inquiry submitted successfully');
     },
     onError: (error) => {
       const message =
         error.response?.data?.message ||
         'Failed to submit inquiry. Please try again.';
-      toast.error(message);
+      showToast.error(message);
     },
   });
 };
