@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ReviewCard from './components/ReviewCard';
 import type { ReviewItem } from './components/ReviewCard';
 import WriteReviewModal from './components/WriteAModel';
 import useGetReviewsMutation from './hooks/useGetReviews';
 import type { GetReviewsResponse, Review } from '../../typs/reviews/get';
 import NoReviews from './components/NoReviews';
+import useAuthStore from '../../store/authStore';
+import { showToast } from '../../utils/toast';
 
 const StarIcon = ({ filled }: { filled: boolean }) => (
   <svg
@@ -17,6 +20,11 @@ const StarIcon = ({ filled }: { filled: boolean }) => (
 );
 
 const ReviewsPage = () => {
+  const navigate = useNavigate();
+  // NOTE: adjust the selected field name to whatever your store actually exposes
+  // (e.g. isAuthenticated, isLoggedIn, or !!user / !!token)
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+
   const [barsAnimated, setBarsAnimated] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [reviewData, setReviewData] = useState<GetReviewsResponse | null>(null);
@@ -24,7 +32,6 @@ const ReviewsPage = () => {
   const { mutate: fetchReviews, isPending } = useGetReviewsMutation({
     onSuccess: (data: GetReviewsResponse) => {
       setReviewData(data);
-      console.log('API Success:', data);
       setTimeout(() => setBarsAnimated(true), 300);
     },
   });
@@ -65,6 +72,16 @@ const ReviewsPage = () => {
       }),
       type: hasImages ? 'photo' : 'text',
     };
+  };
+
+  const handleWriteReviewClick = () => {
+    if (!isAuthenticated) {
+      showToast.error('Please login to write a review');
+      // send them back here after they log in
+      navigate('/sign-in', { state: { from: '/reviews' } });
+      return;
+    }
+    setShowModal(true);
   };
 
   return (
@@ -173,7 +190,7 @@ const ReviewsPage = () => {
             ))}
           </div>
         ) : !hasReviews ? (
-          <NoReviews onWrite={() => setShowModal(true)} />
+          <NoReviews onWrite={handleWriteReviewClick} />
         ) : (
           <>
             <div className="flex flex-col gap-3">
@@ -192,7 +209,7 @@ const ReviewsPage = () => {
       <div className="pointer-events-none fixed right-1 bottom-20 left-0 z-50 flex justify-end px-4">
         {hasReviews && !isPending && (
           <button
-            onClick={() => setShowModal(true)}
+            onClick={handleWriteReviewClick}
             className="pointer-events-auto flex items-center gap-2 rounded-full bg-orange-500 px-6 py-3.5 font-sans text-sm font-semibold text-white shadow-lg shadow-orange-200 transition-all hover:bg-orange-400 active:scale-[0.97]"
           >
             <svg
@@ -213,7 +230,9 @@ const ReviewsPage = () => {
         )}
       </div>
 
-      {showModal && <WriteReviewModal onClose={() => setShowModal(false)} />}
+      {showModal && isAuthenticated && (
+        <WriteReviewModal onClose={() => setShowModal(false)} />
+      )}
     </>
   );
 };

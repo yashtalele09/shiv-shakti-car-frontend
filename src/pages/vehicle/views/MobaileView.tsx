@@ -72,7 +72,6 @@ const Vehicle = () => {
       isInitialLoadRef.current = false;
       setIsInitialLoad(false);
     },
-    onError: (error: any) => console.log('error', error),
   });
 
   const buildApiParams = useCallback(

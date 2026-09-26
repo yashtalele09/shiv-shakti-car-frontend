@@ -6,9 +6,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { SignUpSchema } from '../schema';
 import type { SignUpFormData } from '../schema';
 import { useSignUpMutation } from '../hooks/useSignUpMutation';
-import type { APIFailureData } from '../../../../typs/shared';
+
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+
 import { ROUTES } from '../../../../constants/routes';
 import { motion, type Variants } from 'framer-motion';
 
@@ -106,11 +106,6 @@ const DesktopSignUpView = () => {
           email: form.getValues('email'),
         },
       });
-      toast.success('Registration successful!');
-    },
-    onError: (error: APIFailureData) => {
-      toast.error(error?.message || 'Sign up failed. Please try again.');
-      console.log(error);
     },
   });
 

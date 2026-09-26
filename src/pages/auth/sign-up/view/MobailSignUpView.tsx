@@ -5,7 +5,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { SignUpSchema } from '../schema';
 import type { SignUpFormData } from '../schema';
 import { useSignUpMutation } from '../hooks/useSignUpMutation';
-import type { APIFailureData } from '../../../../typs/shared';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { ROUTES } from '../../../../constants/routes';
@@ -94,10 +93,6 @@ const MobileSignUpView = () => {
         },
       });
       toast.success('Registration successful!');
-    },
-    onError: (error: APIFailureData) => {
-      toast.error(error?.message || 'Sign up failed. Please try again.');
-      console.log(error);
     },
   });
 

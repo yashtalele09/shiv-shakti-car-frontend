@@ -78,117 +78,128 @@ const BannerCarousel = () => {
             : 'none',
         }}
       >
-        {extendedSlides.map((item, index) => (
-          <div key={index} className="relative h-full w-full flex-shrink-0">
-            {/* Background Image */}
-            <img
-              src={item.imageUrl}
-              alt={item.title || 'banner'}
-              className="h-full w-full object-cover"
-            />
+        {extendedSlides.map((item, index) => {
+          // Only the very first slide is the LCP candidate on initial paint.
+          const isFirst = index === 0;
 
-            {/* Gradient Overlay — rich dual-tone */}
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  'linear-gradient(135deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.1) 55%, rgba(0,0,0,0.45) 100%)',
-              }}
-            />
+          return (
+            <div key={index} className="relative h-full w-full flex-shrink-0">
+              {/* Background Image */}
+              <img
+                src={item.imageUrl}
+                alt={item.title || 'banner'}
+                className="h-full w-full object-cover"
+                // First slide: load it eagerly and tell the browser it's
+                // the most important resource on the page. Every other
+                // slide (including the looping clone) can wait.
+                loading={isFirst ? 'eager' : 'lazy'}
+                fetchPriority={isFirst ? 'high' : 'auto'}
+                decoding={isFirst ? 'sync' : 'async'}
+              />
 
-            {/* Subtle top vignette */}
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  'linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, transparent 40%, transparent 60%, rgba(0,0,0,0.5) 100%)',
-              }}
-            />
-
-            {/* Decorative vertical accent line */}
-            <div
-              className="absolute top-8 bottom-8 left-6"
-              style={{
-                width: '2px',
-                background:
-                  'linear-gradient(to bottom, transparent, #FFD700, transparent)',
-                opacity: 0.85,
-              }}
-            />
-
-            {/* Text Content */}
-            <div className="absolute right-10 bottom-10 left-10">
+              {/* Gradient Overlay — rich dual-tone */}
               <div
+                className="absolute inset-0"
                 style={{
-                  fontSize: '10px',
-                  letterSpacing: '3px',
-                  textTransform: 'uppercase',
-                  color: '#FFD700',
-                  fontFamily: "'Georgia', serif",
-                  marginBottom: '6px',
-                  opacity: 0.9,
-                  fontWeight: 600,
-                }}
-              >
-                ✦ Featured
-              </div>
-
-              <h1
-                style={{
-                  fontSize: 'clamp(18px, 3.5vw, 26px)',
-                  fontWeight: 700,
-                  color: '#FFFFFF',
-                  lineHeight: 1.2,
-                  letterSpacing: '-0.3px',
-                  textShadow: '0 2px 20px rgba(0,0,0,0.6)',
-                  maxWidth: '70%',
-                  fontFamily: "'Georgia', 'Times New Roman', serif",
-                }}
-              >
-                {item.title}
-              </h1>
-
-              <div
-                style={{
-                  width: '32px',
-                  height: '1.5px',
-                  background: '#FFD700',
-                  margin: '8px 0',
-                  borderRadius: '2px',
+                  background:
+                    'linear-gradient(135deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.1) 55%, rgba(0,0,0,0.45) 100%)',
                 }}
               />
 
-              <p
+              {/* Subtle top vignette */}
+              <div
+                className="absolute inset-0"
                 style={{
-                  fontSize: '12.5px',
-                  color: 'rgba(255,255,255,0.78)',
-                  letterSpacing: '0.2px',
+                  background:
+                    'linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, transparent 40%, transparent 60%, rgba(0,0,0,0.5) 100%)',
+                }}
+              />
+
+              {/* Decorative vertical accent line */}
+              <div
+                className="absolute top-8 bottom-8 left-6"
+                style={{
+                  width: '2px',
+                  background:
+                    'linear-gradient(to bottom, transparent, #FFD700, transparent)',
+                  opacity: 0.85,
+                }}
+              />
+
+              {/* Text Content */}
+              <div className="absolute right-10 bottom-10 left-10">
+                <div
+                  style={{
+                    fontSize: '10px',
+                    letterSpacing: '3px',
+                    textTransform: 'uppercase',
+                    color: '#FFD700',
+                    fontFamily: "'Georgia', serif",
+                    marginBottom: '6px',
+                    opacity: 0.9,
+                    fontWeight: 600,
+                  }}
+                >
+                  ✦ Featured
+                </div>
+
+                <h1
+                  style={{
+                    fontSize: 'clamp(18px, 3.5vw, 26px)',
+                    fontWeight: 700,
+                    color: '#FFFFFF',
+                    lineHeight: 1.2,
+                    letterSpacing: '-0.3px',
+                    textShadow: '0 2px 20px rgba(0,0,0,0.6)',
+                    maxWidth: '70%',
+                    fontFamily: "'Georgia', 'Times New Roman', serif",
+                  }}
+                >
+                  {item.title}
+                </h1>
+
+                <div
+                  style={{
+                    width: '32px',
+                    height: '1.5px',
+                    background: '#FFD700',
+                    margin: '8px 0',
+                    borderRadius: '2px',
+                  }}
+                />
+
+                <p
+                  style={{
+                    fontSize: '12.5px',
+                    color: 'rgba(255,255,255,0.78)',
+                    letterSpacing: '0.2px',
+                    fontFamily: "'Georgia', serif",
+                    lineHeight: 1.5,
+                    textShadow: '0 1px 8px rgba(0,0,0,0.5)',
+                    maxWidth: '65%',
+                  }}
+                >
+                  {item.subtitle}
+                </p>
+              </div>
+
+              {/* Slide number — top right */}
+              <div
+                className="absolute top-5 right-6"
+                style={{
+                  fontSize: '10px',
+                  letterSpacing: '2px',
+                  color: 'rgba(255,255,255,0.5)',
                   fontFamily: "'Georgia', serif",
-                  lineHeight: 1.5,
-                  textShadow: '0 1px 8px rgba(0,0,0,0.5)',
-                  maxWidth: '65%',
                 }}
               >
-                {item.subtitle}
-              </p>
+                {String(activeDot + 1).padStart(2, '0')}{' '}
+                <span style={{ color: '#FFD700' }}>/</span>{' '}
+                {String(total).padStart(2, '0')}
+              </div>
             </div>
-
-            {/* Slide number — top right */}
-            <div
-              className="absolute top-5 right-6"
-              style={{
-                fontSize: '10px',
-                letterSpacing: '2px',
-                color: 'rgba(255,255,255,0.5)',
-                fontFamily: "'Georgia', serif",
-              }}
-            >
-              {String(activeDot + 1).padStart(2, '0')}{' '}
-              <span style={{ color: '#FFD700' }}>/</span>{' '}
-              {String(total).padStart(2, '0')}
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Dot Indicators */}

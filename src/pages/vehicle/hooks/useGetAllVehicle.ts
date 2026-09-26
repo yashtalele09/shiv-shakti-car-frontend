@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import vehicleService from '../../../lib/services/vehicle-service';
 import type { VehicleAPIInputT } from '../../../typs/vehicle/get';
+import { showToast } from '../../../utils/toast';
 
 type UseGetAllVehicleMutationOptions = {
   onSuccess?: (data: any, variables: VehicleAPIInputT) => void;
@@ -19,8 +20,9 @@ const useGetAllVehicleMutation = (
       queryClient.invalidateQueries({ queryKey: ['vehicle'] });
       options?.onSuccess?.(data, variables);
     },
-    onError: (error) => {
+    onError: (error: any) => {
       options?.onError?.(error);
+      showToast.error(error.message);
     },
   });
 };

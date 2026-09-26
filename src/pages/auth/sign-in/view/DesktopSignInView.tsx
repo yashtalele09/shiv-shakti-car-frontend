@@ -9,12 +9,12 @@ import type { SignInAPISuccessResponseT } from '../../../../typs/auth/sign-in/po
 import { useSignInMutation } from '../hooks/useSignInMutation';
 import type { APIFailureData } from '../../../../typs/shared';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { ROUTES } from '../../../../constants/routes';
 import { motion, type Variants } from 'framer-motion';
 import useAuthStore from '../../../../store/authStore';
 
 import LeftSideShow from '../../../../components/auth-components/LeftSideShow';
+import { showToast } from '../../../../utils/toast';
 
 // Brand accent — pulled from the page's own gradient so every surface reads as one palette.
 const ACCENT = '#6B5BE6';
@@ -84,12 +84,11 @@ const DesktopSignInView = () => {
         },
         data.token
       );
-      toast.success('Welcome back! Signed in successfully.');
+      showToast.success('Welcome back! Signed in successfully.');
       navigate(ROUTES.AUTH.HOME);
     },
     onError: (error: APIFailureData) => {
-      toast.error(error?.message || 'Sign in failed. Please try again.');
-      console.log(error);
+      showToast.error(error?.message || 'Sign in failed. Please try again.');
     },
   });
 

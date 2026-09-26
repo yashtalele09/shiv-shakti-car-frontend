@@ -8,7 +8,6 @@ import { SignInSchema, type SignInFormData } from '../schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { SignInAPISuccessResponseT } from '../../../../typs/auth/sign-in/post';
 import { useSignInMutation } from '../hooks/useSignInMutation';
-import type { APIFailureData } from '../../../../typs/shared';
 import { useState } from 'react';
 import useAuthStore from '../../../../store/authStore';
 
@@ -61,9 +60,6 @@ const MobileSignInView = () => {
         data.token
       );
       navigate(ROUTES.AUTH.HOME);
-    },
-    onError: (error: APIFailureData) => {
-      console.log(error);
     },
   });
 

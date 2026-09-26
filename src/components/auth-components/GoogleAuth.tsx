@@ -3,8 +3,8 @@ import { auth } from '../../utils/firebase';
 import { useGoogleSignInMutation } from '../../hooks/googleMutation';
 import useAuthStore from '../../store/authStore';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
+import { showToast } from '../../utils/toast';
 
 const GoogleAuth = () => {
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ const GoogleAuth = () => {
         },
         data.token
       );
-      toast.success('Google Sign In Successful');
+      showToast.success('Google Sign In Successful');
       navigate('/');
     },
   });
@@ -34,7 +34,7 @@ const GoogleAuth = () => {
 
       googleMutation.mutate({ idToken });
     } catch (error) {
-      toast.error('Google Sign In Failed');
+      showToast.error('Google Sign In Failed');
     }
   };
 

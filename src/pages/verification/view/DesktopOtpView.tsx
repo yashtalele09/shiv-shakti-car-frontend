@@ -56,11 +56,7 @@ const DesktopOtpView = () => {
   // ── Mutations ─────────────────────────────────────────────────────────────
   const { mutate: verifyOtp, isPending: isSubmitting } = useVerifyOtpMutation({
     onSuccess: () => {
-      toast.success('Email verified successfully!');
       navigate(ROUTES.AUTH.SIGN_IN);
-    },
-    onError: (error) => {
-      toast.error(error.message || 'Invalid code. Please try again.');
     },
   });
 
