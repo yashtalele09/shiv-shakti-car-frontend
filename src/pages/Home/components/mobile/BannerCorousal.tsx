@@ -1,37 +1,40 @@
 import { useState, useEffect, useRef } from 'react';
-import { Slogans } from '../../constants';
+import useGetBanner from '../../hooks/useGetBanner';
 
 const BannerCarousel = () => {
+  const { data: slides, isLoading, isError } = useGetBanner();
+
   const [current, setCurrent] = useState(0);
   const [transition, setTransition] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const extendedImages = [...Slogans, Slogans[0]];
-  const total = Slogans.length;
+  const total = slides?.length ?? 0;
+  const extendedSlides = slides && total > 0 ? [...slides, slides[0]] : [];
 
   const startInterval = () => {
+    if (total <= 1) return;
     intervalRef.current = setInterval(() => {
       setCurrent((prev) => prev + 1);
     }, 4000);
   };
 
   useEffect(() => {
-    if (!isPaused) startInterval();
+    if (!isPaused && total > 1) startInterval();
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [isPaused]);
+  }, [isPaused, total]);
 
   useEffect(() => {
-    if (current === total) {
+    if (total > 0 && current === total) {
       setTimeout(() => {
         setTransition(false);
         setCurrent(0);
       }, 700);
       setTimeout(() => setTransition(true), 760);
     }
-  }, [current]);
+  }, [current, total]);
 
   const goTo = (index: number) => {
     if (intervalRef.current) clearInterval(intervalRef.current);
@@ -39,6 +42,19 @@ const BannerCarousel = () => {
     setCurrent(index);
     if (!isPaused) startInterval();
   };
+
+  if (isLoading) {
+    return (
+      <div
+        className="relative w-[95%] animate-pulse rounded-2xl bg-gray-200 shadow-2xl"
+        style={{ height: '260px' }}
+      />
+    );
+  }
+
+  if (isError || total === 0) {
+    return null; // or a fallback static banner if you want one
+  }
 
   const activeDot = current % total;
 
@@ -62,12 +78,12 @@ const BannerCarousel = () => {
             : 'none',
         }}
       >
-        {extendedImages.map((item, index) => (
+        {extendedSlides.map((item, index) => (
           <div key={index} className="relative h-full w-full flex-shrink-0">
             {/* Background Image */}
             <img
-              src={item.url}
-              alt="banner"
+              src={item.imageUrl}
+              alt={item.title || 'banner'}
               className="h-full w-full object-cover"
             />
 
@@ -102,7 +118,6 @@ const BannerCarousel = () => {
 
             {/* Text Content */}
             <div className="absolute right-10 bottom-10 left-10">
-              {/* Eyebrow label */}
               <div
                 style={{
                   fontSize: '10px',
@@ -118,7 +133,6 @@ const BannerCarousel = () => {
                 ✦ Featured
               </div>
 
-              {/* Title */}
               <h1
                 style={{
                   fontSize: 'clamp(18px, 3.5vw, 26px)',
@@ -134,7 +148,6 @@ const BannerCarousel = () => {
                 {item.title}
               </h1>
 
-              {/* Divider */}
               <div
                 style={{
                   width: '32px',
@@ -145,7 +158,6 @@ const BannerCarousel = () => {
                 }}
               />
 
-              {/* Subtitle */}
               <p
                 style={{
                   fontSize: '12.5px',
@@ -180,33 +192,35 @@ const BannerCarousel = () => {
       </div>
 
       {/* Dot Indicators */}
-      <div
-        className="absolute flex items-center gap-2"
-        style={{ bottom: '14px', left: '50%', transform: 'translateX(-50%)' }}
-      >
-        {Slogans.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => goTo(index)}
-            style={{
-              height: '3px',
-              width: activeDot === index ? '24px' : '8px',
-              borderRadius: '999px',
-              background:
-                activeDot === index ? '#FFD700' : 'rgba(255,255,255,0.35)',
-              border: 'none',
-              padding: 0,
-              cursor: 'pointer',
-              transition: 'all 400ms cubic-bezier(0.4, 0, 0.2, 1)',
-              outline: 'none',
-            }}
-            aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
-      </div>
+      {total > 1 && (
+        <div
+          className="absolute flex items-center gap-2"
+          style={{ bottom: '14px', left: '50%', transform: 'translateX(-50%)' }}
+        >
+          {slides!.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goTo(index)}
+              style={{
+                height: '3px',
+                width: activeDot === index ? '24px' : '8px',
+                borderRadius: '999px',
+                background:
+                  activeDot === index ? '#FFD700' : 'rgba(255,255,255,0.35)',
+                border: 'none',
+                padding: 0,
+                cursor: 'pointer',
+                transition: 'all 400ms cubic-bezier(0.4, 0, 0.2, 1)',
+                outline: 'none',
+              }}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Progress bar */}
-      {!isPaused && (
+      {!isPaused && total > 1 && (
         <div
           className="absolute right-0 bottom-0 left-0"
           style={{ height: '2px', background: 'rgba(255,255,255,0.1)' }}

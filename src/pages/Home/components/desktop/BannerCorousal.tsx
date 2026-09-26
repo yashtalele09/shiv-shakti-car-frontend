@@ -2,42 +2,31 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-
-export interface HeroSlide {
-  id: string;
-  image: string;
-  /** short label above the title, e.g. "CERTIFIED PRE-OWNED" */
-  eyebrow?: string;
-  title: string;
-  subtitle?: string;
-  ctaLabel?: string;
-  onCtaClick?: () => void;
-}
+import useGetBanner from '../../hooks/useGetBanner';
 
 interface HeroCarouselProps {
-  slides: HeroSlide[];
   /** ms between auto-advances. Default 6000. */
   intervalMs?: number;
-  /** Renders a search/filter bar under the title. Optional. */
-  onSearch?: (query: string) => void;
 }
 
-const AUTOPLAY_MS_DEFAULT = 3000;
+const AUTOPLAY_MS_DEFAULT = 6000;
 
 export default function HeroCarousel({
-  slides,
   intervalMs = AUTOPLAY_MS_DEFAULT,
 }: HeroCarouselProps) {
+  const { data: slides, isLoading, isError } = useGetBanner();
+
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState<1 | -1>(1);
   const [isPaused, setIsPaused] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const count = slides.length;
+  const count = slides?.length ?? 0;
 
   const navigate = useNavigate();
 
   const goTo = useCallback(
     (next: number, dir: 1 | -1) => {
+      if (count === 0) return;
       setDirection(dir);
       setIndex(((next % count) + count) % count);
     },
@@ -66,21 +55,31 @@ export default function HeroCarousel({
 
   // Keyboard navigation
   useEffect(() => {
+    if (count <= 1) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'ArrowRight') goNext();
       if (e.key === 'ArrowLeft') goPrev();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [goNext, goPrev]);
-
-  const slide = slides[index];
+  }, [goNext, goPrev, count]);
 
   const slideVariants = {
     enter: (_dir: 1 | -1) => ({ opacity: 0, scale: 1.06 }),
     center: { opacity: 1, scale: 1 },
     exit: (_dir: 1 | -1) => ({ opacity: 0, scale: 1.0 }),
   };
+
+  if (isLoading) {
+    return <section className="h-[95vh] w-full animate-pulse bg-slate-950" />;
+  }
+
+  if (isError || !slides || slides.length === 0) {
+    return null;
+  }
+
+  const slide = slides[index];
+  const slideKey = slide.imagePublicId ?? String(index);
 
   return (
     <section
@@ -95,7 +94,7 @@ export default function HeroCarousel({
       {/* Slides */}
       <AnimatePresence initial={false} custom={direction} mode="popLayout">
         <motion.div
-          key={slide.id}
+          key={slideKey}
           custom={direction}
           variants={slideVariants}
           initial="enter"
@@ -105,7 +104,7 @@ export default function HeroCarousel({
           className="absolute inset-0"
         >
           <img
-            src={slide.image}
+            src={slide.imageUrl}
             alt={slide.title}
             className="h-full w-full object-cover"
             draggable={false}
@@ -135,7 +134,7 @@ export default function HeroCarousel({
       <div className="relative z-10 flex h-full w-full flex-col items-start justify-center px-6 text-left sm:px-12 lg:px-20">
         <AnimatePresence mode="wait">
           <motion.div
-            key={slide.id + '-copy'}
+            key={slideKey + '-copy'}
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
@@ -150,18 +149,14 @@ export default function HeroCarousel({
                 {slide.subtitle}
               </p>
             )}
-            {slide.ctaLabel && (
-              <button
-                onClick={() => navigate('/vehicle')}
-                className="mt-5 rounded-full bg-gradient-to-r from-[#2D1E4A] to-[#4B3A73] px-6 py-2 text-sm font-medium text-white shadow-md transition-all duration-300 hover:scale-105"
-              >
-                Explore Cars
-              </button>
-            )}
+            <button
+              onClick={() => navigate('/vehicle')}
+              className="mt-5 rounded-full bg-gradient-to-r from-[#2D1E4A] to-[#4B3A73] px-6 py-2 text-sm font-medium text-white shadow-md transition-all duration-300 hover:scale-105"
+            >
+              Explore Cars
+            </button>
           </motion.div>
         </AnimatePresence>
-
-        {/* Optional search bar */}
       </div>
 
       {/* Prev / Next arrows, pinned to left/right edges */}
@@ -187,29 +182,32 @@ export default function HeroCarousel({
       {/* Dot indicators + autoplay progress */}
       {count > 1 && (
         <div className="absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2">
-          {slides.map((s, i) => (
-            <button
-              key={s.id}
-              onClick={() => goTo(i, i > index ? 1 : -1)}
-              aria-label={`Go to slide ${i + 1}`}
-              aria-current={i === index}
-              className="relative h-1.5 overflow-hidden rounded-full bg-white/30 transition-all"
-              style={{ width: i === index ? 32 : 8 }}
-            >
-              {i === index && !isPaused && (
-                <motion.span
-                  key={slide.id + '-progress'}
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: 1 }}
-                  transition={{ duration: intervalMs / 1000, ease: 'linear' }}
-                  className="absolute inset-0 origin-left bg-indigo-400"
-                />
-              )}
-              {i === index && isPaused && (
-                <span className="absolute inset-0 bg-indigo-400" />
-              )}
-            </button>
-          ))}
+          {slides.map((s, i) => {
+            const key = s.imagePublicId ?? String(i);
+            return (
+              <button
+                key={key}
+                onClick={() => goTo(i, i > index ? 1 : -1)}
+                aria-label={`Go to slide ${i + 1}`}
+                aria-current={i === index}
+                className="relative h-1.5 overflow-hidden rounded-full bg-white/30 transition-all"
+                style={{ width: i === index ? 32 : 8 }}
+              >
+                {i === index && !isPaused && (
+                  <motion.span
+                    key={slideKey + '-progress'}
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ duration: intervalMs / 1000, ease: 'linear' }}
+                    className="absolute inset-0 origin-left bg-indigo-400"
+                  />
+                )}
+                {i === index && isPaused && (
+                  <span className="absolute inset-0 bg-indigo-400" />
+                )}
+              </button>
+            );
+          })}
         </div>
       )}
     </section>
