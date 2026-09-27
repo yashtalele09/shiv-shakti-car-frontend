@@ -52,9 +52,11 @@ const SectionHeading = ({ label, accent }: any) => (
 // ─── Home Component ───────────────────────────────────
 
 const Home = () => {
-  const { expanded, setExpanded } = useOutletContext<any>();
   const [selectedType, setSelectedType] = useState<string | null>('All');
   const sheetRef = useRef<HTMLDivElement | null>(null);
+  const context = useOutletContext<any>();
+  const expanded = context?.expanded ?? false;
+  const setExpanded = context?.setExpanded ?? (() => {});
 
   const startY = useRef(0);
   const endY = useRef(0);
