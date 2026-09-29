@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import logo from '../../../assets/logdumy.png';
 import Search from './Search';
 import useAuthStore from '../../../store/authStore';
 
@@ -70,7 +69,7 @@ const Header = ({
         {/* Logo */}
         <div className="flex items-center gap-3">
           <img
-            src={logo}
+            src="/logdumy.png"
             alt="logo"
             className="h-15 w-20 object-contain drop-shadow-sm"
             onClick={() => navigate('/')}
@@ -136,7 +135,7 @@ const Header = ({
     >
       {/* Logo — always visible */}
       <img
-        src={logo}
+        src="/logdumy.png"
         alt="logo"
         className="h-15 w-20 shrink-0 object-contain drop-shadow-sm"
         onClick={() => navigate('/')}

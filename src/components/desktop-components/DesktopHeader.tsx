@@ -1,7 +1,6 @@
 import { motion, useMotionValueEvent, useScroll } from 'framer-motion';
 import { useRef, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import logo from '../../assets/logdumy.png';
 import Search from '../mobail-components/mobail-header/Search';
 import useAuthStore from '../../store/authStore';
 import { Mail, Phone, Sparkles } from 'lucide-react';
@@ -97,7 +96,7 @@ const Header = () => {
           aria-label="Go to homepage"
         >
           <img
-            src={logo}
+            src="/logdumy.png"
             alt="Shri Shivshakti Car Bazar"
             className="h-14 w-auto object-contain drop-shadow-sm"
           />

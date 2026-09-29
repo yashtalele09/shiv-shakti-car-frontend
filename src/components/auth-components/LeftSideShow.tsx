@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Logo from '../../assets/logdumy.png';
 import banner from '../../assets/banner.png';
 
 const slides = [
@@ -42,7 +41,7 @@ const LeftSideShow = () => {
       <div>
         <div className="mb-6 flex items-center gap-2.5">
           <img
-            src={Logo}
+            src="/logdumy.png"
             alt="Shri Shivshakti Car Bazar"
             className="h-15 w-15 rounded-xl object-contain"
           />

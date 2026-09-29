@@ -11,7 +11,6 @@ import {
   Car,
   Send,
 } from 'lucide-react';
-import logoimg from '../../assets/logdumy.png';
 
 const DesktopFooter = () => {
   const [logoFailed, setLogoFailed] = useState(false);
@@ -108,7 +107,7 @@ const DesktopFooter = () => {
               {!logoFailed ? (
                 <span className="flex items-center gap-3 rounded-xl bg-white p-1">
                   <img
-                    src={logoimg}
+                    src="/logdumy.png"
                     alt="Shri Shivshakti Car Bazar logo"
                     onError={() => setLogoFailed(true)}
                     className="h-14 w-14 flex-shrink-0 rounded-xl object-contain"
