@@ -170,20 +170,20 @@ const Header = () => {
 
         <div className="flex items-center gap-6 text-xs font-medium text-violet-200">
           <a
-            href="tel:+919876543210"
+            href="tel:+919422279478"
             className="flex items-center gap-1.5 transition-colors hover:text-amber-300"
           >
             <Phone size={12} className="text-emerald-400" />
-            <span>+91 98765 43210</span>
+            <span>+91 9422279478</span>
           </a>
 
           <div className="h-3.5 w-px bg-violet-700/60" />
           <a
-            href="mailto:info@shivshakticarbazar.com"
+            href="mailto:shivshakticarbazar@rediffmail.com"
             className="flex items-center gap-1.5 transition-colors hover:text-amber-300"
           >
             <Mail size={12} className="text-pink-400" />
-            <span>info@shivshakticarbazar.com</span>
+            <span>shivshakticarbazar@rediffmail.com</span>
           </a>
         </div>
       </div>
