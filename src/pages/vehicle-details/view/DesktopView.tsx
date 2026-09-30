@@ -253,7 +253,7 @@ const DesktopVehicleDetails = () => {
       className="min-h-screen bg-[#F8FAFC]"
       style={{ fontFamily: "'DM Sans', sans-serif" }}
     >
-      <div className="mx-auto w-full max-w-[1440px] px-8 pt-28 pb-16">
+      <div className="mx-auto w-full max-w-[1440px] px-8 pt-5 pb-16">
         {/* Breadcrumb / back */}
         <div className="mb-5 flex items-center justify-between">
           <button
