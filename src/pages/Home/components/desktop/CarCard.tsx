@@ -15,12 +15,21 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import type { VehicleDataT } from '../../../../typs/vehicle/get';
+import type { LikeStateT } from '../../../../typs/like/like';
 import { brands } from '../../constants';
 import { formatPrice } from '../../../../helper/format';
+import useToggleLike from '../../../../hooks/useVehicleLikes';
+import useGetLikeStatus from '../../../../hooks/useGetVehicleLike';
 
 interface CarCardProps {
   vehicleData: VehicleDataT;
+  // Pass this when the parent already loaded likes in bulk (useGetBulkLikes)
+  likeState?: LikeStateT;
+  // Pass true while the parent's bulk request is still loading, so the card
+  // does not fire its own request in the meantime
+  disableLikeFetch?: boolean;
 }
 
 // ─── Helper: detect video by extension ────────────────────────────────────────
@@ -116,13 +125,31 @@ const VerifiedSeal = () => (
 );
 
 // ─── Main Component ───────────────────────────────────────────────────────────
-const CarCard = ({ vehicleData }: CarCardProps) => {
-  const [liked, setLiked] = useState(false);
+const CarCard = ({
+  vehicleData,
+  likeState,
+  disableLikeFetch = false,
+}: CarCardProps) => {
   const [currentImage, setCurrentImage] = useState(0);
   const [likeAnim, setLikeAnim] = useState(false);
   const [imgError, setImgError] = useState<Record<number, boolean>>({});
 
   const navigate = useNavigate();
+
+  const vehicleId = vehicleData?.vehicle_id;
+
+  // ── Likes ───────────────────────────────────────────────────────────────────
+  // Skip the per-card request when the parent supplies likes in bulk
+  const { data: likeData } = useGetLikeStatus(
+    likeState || disableLikeFetch ? undefined : vehicleId
+  );
+
+  const { mutate: toggleLike, isPending: isLikePending } = useToggleLike({
+    onError: () => toast.error('Could not update your like. Please try again.'),
+  });
+
+  const liked = likeState?.liked ?? likeData?.data?.liked ?? false;
+  const likesCount = likeState?.likesCount ?? likeData?.data?.likesCount ?? 0;
 
   // ── Safe media array (never undefined) ──────────────────────────────────────
   const images: string[] =
@@ -144,7 +171,9 @@ const CarCard = ({ vehicleData }: CarCardProps) => {
 
   // ── Handlers ────────────────────────────────────────────────────────────────
   const handleLike = () => {
-    setLiked((prev) => !prev);
+    if (!vehicleId || isLikePending) return;
+
+    toggleLike({ vehicleId });
     setLikeAnim(true);
     setTimeout(() => setLikeAnim(false), 400);
   };
@@ -276,10 +305,12 @@ const CarCard = ({ vehicleData }: CarCardProps) => {
         {/* Wishlist button */}
         <motion.button
           onClick={handleLike}
+          disabled={isLikePending}
           animate={likeAnim ? { scale: [1, 1.4, 0.9, 1] } : {}}
           transition={{ duration: 0.35 }}
           aria-label={liked ? 'Remove from wishlist' : 'Add to wishlist'}
-          className="absolute top-3 right-3 z-20 rounded-full bg-white/90 p-2 shadow-sm backdrop-blur-sm transition hover:bg-white"
+          aria-pressed={liked}
+          className="absolute top-3 right-3 z-20 flex items-center gap-1 rounded-full bg-white/90 p-2 shadow-sm backdrop-blur-sm transition hover:bg-white disabled:cursor-not-allowed"
         >
           <Heart
             size={18}
@@ -287,6 +318,11 @@ const CarCard = ({ vehicleData }: CarCardProps) => {
               liked ? 'fill-[#C9972D] text-[#C9972D]' : 'text-[#AEB9C7]'
             }`}
           />
+          {likesCount > 0 && (
+            <span className="pr-0.5 text-[11px] leading-none font-semibold text-[#334155]">
+              {likesCount}
+            </span>
+          )}
         </motion.button>
       </div>
 
@@ -362,12 +398,6 @@ const CarCard = ({ vehicleData }: CarCardProps) => {
 
         {/* Divider + CTA */}
         <div className="flex gap-2 border-t border-[#E7EBF1] pt-3">
-          {/* <button
-            onClick={handleLike}
-            className="flex-1 rounded-xl border border-[#1B2F4B] py-2 text-[12px] font-semibold text-[#1B2F4B] transition-colors duration-200 hover:bg-[#F1F4F8]"
-          >
-            {liked ? 'Saved ✓' : 'Save'}
-          </button> */}
           <button
             onClick={() =>
               navigate(`/vehicle-details?vehicle_id=${vehicleData?.vehicle_id}`)

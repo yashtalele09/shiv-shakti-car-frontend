@@ -13,6 +13,7 @@ import FAQ from '../components/mobile/Faq';
 import { motion, type Variants } from 'framer-motion';
 import useGetFeaturedVehicleMutation from '../hooks/useGetFeaturedVehicle';
 import useGetReviewsMutation from '../hooks/useGetReviews';
+import useGetBulkLikes from '../../../hooks/useBulkLike'; // adjust to your file name/path
 import MobailFooter from '../../../components/mobail-components/mobail-footer/MobailFooter';
 
 // ─── Animations ─────────────────────────────────────────
@@ -102,6 +103,13 @@ const Home = () => {
     onError: (error) => console.error('Failed to fetch:', error),
   });
 
+  const vehicles: { vehicle_id: string }[] = vehicleData?.vehicleData || [];
+
+  // ONE request for all card like counts + liked state
+  const { data: likesData, isLoading: likesLoading } = useGetBulkLikes(
+    vehicles.map((v) => v.vehicle_id)
+  );
+
   useEffect(() => {
     if (expanded) {
       fetchReviews();
@@ -175,6 +183,8 @@ const Home = () => {
                 vehicles={vehicleData?.vehicleData || []}
                 selectedType={selectedType || ''}
                 isLoading={isVehiclesLoading}
+                likes={likesData?.data}
+                likesLoading={likesLoading}
               />
             </motion.div>
 

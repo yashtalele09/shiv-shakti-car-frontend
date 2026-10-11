@@ -8,6 +8,7 @@ import CarLoader from '../../../components/mobail-components/Loading';
 import NoData from '../components/mobile/NoData';
 import type { VehicleAPIInputT, VehicleDataT } from '../../../typs/vehicle/get';
 import { useSearchParams } from 'react-router-dom';
+import useGetBulkLikes from '../../../hooks/useBulkLike';
 
 const LIMIT = 8;
 
@@ -73,6 +74,11 @@ const Vehicle = () => {
       setIsInitialLoad(false);
     },
   });
+
+  // ONE request for like counts + liked state of everything currently listed
+  const { data: likesData, isLoading: likesLoading } = useGetBulkLikes(
+    displayData.map((v) => v.vehicle_id)
+  );
 
   const buildApiParams = useCallback(
     (currentFilters: string[]): VehicleAPIInputT => {
@@ -249,7 +255,12 @@ const Vehicle = () => {
           <NoData />
         ) : (
           displayData.map((item) => (
-            <CarCard key={item._id} vehicleData={item} />
+            <CarCard
+              key={item._id}
+              vehicleData={item}
+              likeState={likesData?.data?.[item.vehicle_id]}
+              disableLikeFetch={likesLoading}
+            />
           ))
         )}
 

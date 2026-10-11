@@ -23,6 +23,7 @@ import {
   Calculator,
   Star,
 } from 'lucide-react';
+import { toast } from 'react-toastify';
 import useGetVehicleByIdMutation from '../hooks/GetVehicleById';
 import { useSearchParams } from 'react-router-dom';
 import ImageLightbox from '../components/mobile/ImagelightBox';
@@ -37,6 +38,8 @@ import {
 import type { VehicleDataSuccessT } from '../../../typs/vehicle-details/get';
 import { useTrackAnalyticsMutation } from '../../../hooks/useAnalyticsMutation';
 import { getSessionId } from '../../../utils/session';
+import useToggleLike from '../../../hooks/useVehicleLikes';
+import useGetLikeStatus from '../../../hooks/useGetVehicleLike';
 
 // ─── constants ────────────────────────────────────────────────────────────────
 
@@ -96,7 +99,6 @@ const VerifiedSeal = () => (
 const DesktopVehicleDetails = () => {
   const [vehicle, setVehicle] = useState<VehicleDataSuccessT | null>(null);
   const [imgIndex, setImgIndex] = useState(0);
-  const [liked, setLiked] = useState(false);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
@@ -106,6 +108,22 @@ const DesktopVehicleDetails = () => {
   const id = searchParams.get('vehicle_id');
 
   const { mutate: trackAnalytics } = useTrackAnalyticsMutation();
+
+  // ── Likes ──────────────────────────────────────────────────────────────────
+  // Hooks must stay above the early returns below.
+  const { data: likeData } = useGetLikeStatus(id ?? undefined);
+
+  const { mutate: toggleLike, isPending: isLikePending } = useToggleLike({
+    onError: () => toast.error('Could not update your like. Please try again.'),
+  });
+
+  const liked = likeData?.data?.liked ?? false;
+  const likesCount = likeData?.data?.likesCount ?? 0;
+
+  const handleLike = () => {
+    if (!id || isLikePending) return;
+    toggleLike({ vehicleId: id });
+  };
 
   const {
     mutate: fetchVehicle,
@@ -330,9 +348,13 @@ const DesktopVehicleDetails = () => {
                 {/* top-right actions */}
                 <div className="pointer-events-none absolute top-4 right-4 z-20 flex gap-2">
                   <button
-                    onClick={() => setLiked((v) => !v)}
-                    aria-label="Save vehicle"
-                    className="pointer-events-auto rounded-full bg-white/90 p-2.5 shadow-sm backdrop-blur-sm transition hover:bg-white"
+                    onClick={handleLike}
+                    disabled={isLikePending}
+                    aria-label={
+                      liked ? 'Remove from wishlist' : 'Add to wishlist'
+                    }
+                    aria-pressed={liked}
+                    className="pointer-events-auto flex min-h-10 min-w-10 items-center justify-center gap-1.5 rounded-full bg-white/90 px-2.5 shadow-sm backdrop-blur-sm transition hover:bg-white disabled:cursor-not-allowed"
                   >
                     <Heart
                       size={18}
@@ -342,6 +364,11 @@ const DesktopVehicleDetails = () => {
                           : 'text-[#AEB9C7]'
                       }`}
                     />
+                    {likesCount > 0 && (
+                      <span className="text-xs leading-none font-semibold text-[#334155]">
+                        {likesCount}
+                      </span>
+                    )}
                   </button>
                   <button
                     onClick={() => setShareOpen(true)}

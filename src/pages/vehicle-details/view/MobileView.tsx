@@ -15,6 +15,7 @@ import {
   CheckCircle2,
   Play,
 } from 'lucide-react';
+import { toast } from 'react-toastify';
 import useGetVehicleByIdMutation from '../hooks/GetVehicleById';
 import { useSearchParams } from 'react-router-dom';
 import ImageLightbox from '../components/mobile/ImagelightBox';
@@ -29,6 +30,8 @@ import {
 import type { VehicleDataSuccessT } from '../../../typs/vehicle-details/get';
 import { useTrackAnalyticsMutation } from '../../../hooks/useAnalyticsMutation';
 import { getSessionId } from '../../../utils/session';
+import useToggleLike from '../../../hooks/useVehicleLikes';
+import useGetLikeStatus from '../../../hooks/useGetVehicleLike';
 
 // ─── fallback images ──────────────────────────────────────────────────────────
 
@@ -41,7 +44,6 @@ const FALLBACK_IMAGES = [
 const VehicleDetails = () => {
   const [vehicle, setVehicle] = useState<VehicleDataSuccessT | null>(null);
   const [imgIndex, setImgIndex] = useState(0);
-  const [liked, setLiked] = useState(false);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
@@ -50,6 +52,22 @@ const VehicleDetails = () => {
   const id = searchParams.get('vehicle_id');
 
   const { mutate: trackAnalytics } = useTrackAnalyticsMutation();
+
+  // ── Likes ──────────────────────────────────────────────────────────────────
+  // Hooks must stay above the early returns below.
+  const { data: likeData } = useGetLikeStatus(id ?? undefined);
+
+  const { mutate: toggleLike, isPending: isLikePending } = useToggleLike({
+    onError: () => toast.error('Could not update your like. Please try again.'),
+  });
+
+  const liked = likeData?.data?.liked ?? false;
+  const likesCount = likeData?.data?.likesCount ?? 0;
+
+  const handleLike = () => {
+    if (!id || isLikePending) return;
+    toggleLike({ vehicleId: id });
+  };
 
   const {
     mutate: fetchVehicle,
@@ -173,8 +191,11 @@ const VehicleDetails = () => {
 
             <div className="pointer-events-auto flex gap-2">
               <button
-                onClick={() => setLiked((v) => !v)}
-                className="rounded-full bg-black/50 p-2 backdrop-blur-sm"
+                onClick={handleLike}
+                disabled={isLikePending}
+                aria-label={liked ? 'Remove from wishlist' : 'Add to wishlist'}
+                aria-pressed={liked}
+                className="flex min-h-9 min-w-9 items-center justify-center gap-1 rounded-full bg-black/50 px-2 backdrop-blur-sm transition-transform duration-200 active:scale-90 disabled:cursor-not-allowed"
               >
                 <Heart
                   size={18}
@@ -182,6 +203,11 @@ const VehicleDetails = () => {
                     liked ? 'fill-[#FF7272] text-[#FF7272]' : 'text-white'
                   }
                 />
+                {likesCount > 0 && (
+                  <span className="text-xs leading-none font-semibold text-white">
+                    {likesCount}
+                  </span>
+                )}
               </button>
 
               <button

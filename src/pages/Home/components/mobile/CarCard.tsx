@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Card from '../../../../assets/banner.png';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { toast } from 'react-toastify';
 import {
   Heart,
   Fuel,
@@ -12,6 +13,9 @@ import {
   ArrowRight,
   Star,
 } from 'lucide-react';
+import type { LikeStateT } from '../../../../typs/like/like';
+import useToggleLike from '../../../../hooks/useVehicleLikes';
+import useGetLikeStatus from '../../../../hooks/useGetVehicleLike';
 
 interface CarCardProps {
   vehicle_id: string;
@@ -23,6 +27,11 @@ interface CarCardProps {
   year: string;
   media?: string[];
   featured?: boolean;
+  // Pass this when the parent already loaded likes in bulk (useGetBulkLikes)
+  likeState?: LikeStateT;
+  // Pass true while the parent's bulk request is still loading, so the card
+  // does not fire its own request in the meantime
+  disableLikeFetch?: boolean;
 }
 
 // ─── Featured ribbon — shares the visual language of the main CarCard ─────────
@@ -58,11 +67,31 @@ const CarCard = ({
   km,
   year,
   media = [],
+  likeState,
+  disableLikeFetch = false,
 }: CarCardProps) => {
-  const [liked, setLiked] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loadedMap, setLoadedMap] = useState<Record<number, boolean>>({});
   const navigate = useNavigate();
+
+  // ── Likes ───────────────────────────────────────────────────────────────────
+  // Skip the per-card request when the parent supplies likes in bulk
+  const { data: likeData } = useGetLikeStatus(
+    likeState || disableLikeFetch ? undefined : vehicle_id
+  );
+
+  const { mutate: toggleLike, isPending: isLikePending } = useToggleLike({
+    onError: () => toast.error('Could not update your like. Please try again.'),
+  });
+
+  const liked = likeState?.liked ?? likeData?.data?.liked ?? false;
+  const likesCount = likeState?.likesCount ?? likeData?.data?.likesCount ?? 0;
+
+  const handleLike = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!vehicle_id || isLikePending) return;
+    toggleLike({ vehicleId: vehicle_id });
+  };
 
   const isVideo = (url: string) =>
     url.endsWith('.mp4') || url.endsWith('.webm') || url.endsWith('.ogg');
@@ -208,12 +237,11 @@ const CarCard = ({
 
         {/* Like */}
         <button
-          onClick={(e) => {
-            e.stopPropagation();
-            setLiked((prev) => !prev);
-          }}
+          onClick={handleLike}
+          disabled={isLikePending}
           aria-label={liked ? 'Remove from wishlist' : 'Add to wishlist'}
-          className="absolute top-2.5 right-2.5 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 shadow-sm backdrop-blur-sm transition-transform duration-200 active:scale-90"
+          aria-pressed={liked}
+          className="absolute top-2.5 right-2.5 z-20 flex h-7 min-w-7 items-center justify-center gap-0.5 rounded-full bg-white/90 px-1.5 shadow-sm backdrop-blur-sm transition-transform duration-200 active:scale-90 disabled:cursor-not-allowed"
         >
           <Heart
             size={13}
@@ -222,6 +250,11 @@ const CarCard = ({
               liked ? 'fill-red-500 text-red-500' : 'text-gray-400'
             }`}
           />
+          {likesCount > 0 && (
+            <span className="text-[10px] leading-none font-semibold text-[#6b5a85]">
+              {likesCount}
+            </span>
+          )}
         </button>
       </div>
 

@@ -5,11 +5,13 @@ import SectionHeading from '../components/desktop/SectionHeading';
 import CardCarousel from '../components/desktop/CardCorousal';
 import useGetFeaturedVehicleMutation from '../hooks/useGetFeaturedVehicle';
 import useGetReviewsMutation from '../hooks/useGetReviews';
+import useGetBulkLikes from '../../../hooks/useBulkLike'; //
 import BrandButtonsFiltersDesktop from '../components/desktop/BrandBottonFilter';
 import ServicesSection from '../components/desktop/ServiceSection';
 import BeltCarousel from '../components/desktop/BeltCorousal';
 import Review from '../components/desktop/Review';
 import FAQ from '../components/desktop/Faq';
+import type { VehicleDataT } from '../../../typs/vehicle/get'; // adjust path
 
 const DesktopHomeView = () => {
   const [selectedType, setSelectedType] = useState<string | null>('All');
@@ -22,6 +24,13 @@ const DesktopHomeView = () => {
   const { mutate: fetchReviews, data: reviewData } = useGetReviewsMutation({
     onError: (error) => console.error('Failed to fetch:', error),
   });
+
+  const vehicles: VehicleDataT[] = vehicleData?.vehicleData || [];
+
+  // ONE request for all card like counts + liked state
+  const { data: likesData, isLoading: likesLoading } = useGetBulkLikes(
+    vehicles.map((v) => v.vehicle_id)
+  );
 
   useEffect(() => {
     fetchVehicles({ body_type: selectedType || 'All' });
@@ -41,7 +50,11 @@ const DesktopHomeView = () => {
           setActiveType={setSelectedType}
         />
         <div className="flex min-w-0 items-center justify-center">
-          <CardCarousel vehicles={vehicleData?.vehicleData || []} />
+          <CardCarousel
+            vehicles={vehicles}
+            likes={likesData?.data}
+            likesLoading={likesLoading}
+          />
         </div>
       </div>
       <div className="w-full overflow-x-hidden bg-[#F8FAFC] p-5">

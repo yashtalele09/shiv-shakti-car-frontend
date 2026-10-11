@@ -5,9 +5,14 @@ import { ArrowRight, LayoutGrid } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import CarCard from './CarCard';
 import type { VehicleDataT } from '../../../../typs/vehicle/get';
+import type { LikeStateT } from '../../../../typs/like/like';
 
 interface CardCorouselProps {
   vehicles: VehicleDataT[];
+  // Bulk like data keyed by vehicle_id (from useGetBulkLikes in the parent)
+  likes?: Record<string, LikeStateT>;
+  // True while the parent's bulk request is loading, so cards don't fetch on their own
+  likesLoading?: boolean;
 }
 
 // ─── Final "View All" CTA slide ────────────────────────────────────────────
@@ -50,7 +55,11 @@ const ViewAllCard = ({ total }: { total: number }) => {
   );
 };
 
-const CardCorousal = ({ vehicles }: CardCorouselProps) => {
+const CardCorousal = ({
+  vehicles,
+  likes,
+  likesLoading = false,
+}: CardCorouselProps) => {
   const scrollerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [progress, setProgress] = useState(0);
@@ -171,7 +180,11 @@ const CardCorousal = ({ vehicles }: CardCorouselProps) => {
           >
             {vehicles.map((vehicleData) => (
               <div key={vehicleData.vehicle_id} className="snap-center">
-                <CarCard vehicleData={vehicleData} />
+                <CarCard
+                  vehicleData={vehicleData}
+                  likeState={likes?.[vehicleData.vehicle_id]}
+                  disableLikeFetch={likesLoading}
+                />
               </div>
             ))}
 

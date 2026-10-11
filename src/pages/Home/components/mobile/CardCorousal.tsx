@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import CarCard from './CarCard';
+import type { LikeStateT } from '../../../../typs/like/like'; // adjust path to your typs folder
 
 const ViewAllCard = ({ selectedType }: { selectedType?: string }) => {
   const navigate = useNavigate();
@@ -179,10 +180,16 @@ const CardCarousel = ({
   vehicles,
   selectedType,
   isLoading = false,
+  likes,
+  likesLoading = false,
 }: {
   vehicles: any;
   selectedType?: string;
   isLoading?: boolean;
+  // Bulk like data keyed by vehicle_id (from useGetBulkLikes in the parent)
+  likes?: Record<string, LikeStateT>;
+  // True while the parent's bulk request is loading, so cards don't fetch on their own
+  likesLoading?: boolean;
 }) => {
   const formatPrice = (price: number) => {
     if (price >= 10000000) {
@@ -260,6 +267,8 @@ const CardCarousel = ({
             km={`${car.kilometers_driven} KM`}
             year={car.registration_year}
             media={car.vehicle_images_video || []}
+            likeState={likes?.[car.vehicle_id]}
+            disableLikeFetch={likesLoading}
           />
         ))}
 

@@ -10,6 +10,7 @@ import NoData from '../components/desktop/NoData';
 import useGetAllVehicleMutation from '../hooks/useGetAllVehicle';
 import CarLoader from '../../../components/mobail-components/Loading';
 import type { VehicleAPIInputT, VehicleDataT } from '../../../typs/vehicle/get';
+import useGetBulkLikes from '../../../hooks/useBulkLike';
 
 const LIMIT = 12;
 
@@ -85,6 +86,10 @@ const VehicleDesktop = () => {
       setIsInitialLoad(false);
     },
   });
+
+  const { data: likesData, isLoading: likesLoading } = useGetBulkLikes(
+    displayData.map((v) => v.vehicle_id)
+  );
 
   const buildApiParams = useCallback(
     (currentFilters: string[]): VehicleAPIInputT => {
@@ -272,7 +277,12 @@ const VehicleDesktop = () => {
         ) : (
           <div className="grid grid-cols-2 gap-5 xl:grid-cols-3 2xl:grid-cols-3">
             {displayData.map((item) => (
-              <CarCard key={item._id} vehicleData={item} />
+              <CarCard
+                key={item._id}
+                vehicleData={item}
+                likeState={likesData?.data?.[item.vehicle_id]}
+                disableLikeFetch={likesLoading}
+              />
             ))}
           </div>
         )}
