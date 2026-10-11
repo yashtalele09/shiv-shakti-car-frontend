@@ -15,7 +15,6 @@ import {
   CheckCircle2,
   Play,
 } from 'lucide-react';
-import { toast } from 'react-toastify';
 import useGetVehicleByIdMutation from '../hooks/GetVehicleById';
 import { useSearchParams } from 'react-router-dom';
 import ImageLightbox from '../components/mobile/ImagelightBox';
@@ -32,6 +31,7 @@ import { useTrackAnalyticsMutation } from '../../../hooks/useAnalyticsMutation';
 import { getSessionId } from '../../../utils/session';
 import useToggleLike from '../../../hooks/useVehicleLikes';
 import useGetLikeStatus from '../../../hooks/useGetVehicleLike';
+import { showToast } from '../../../utils/toast';
 
 // ─── fallback images ──────────────────────────────────────────────────────────
 
@@ -58,7 +58,8 @@ const VehicleDetails = () => {
   const { data: likeData } = useGetLikeStatus(id ?? undefined);
 
   const { mutate: toggleLike, isPending: isLikePending } = useToggleLike({
-    onError: () => toast.error('Could not update your like. Please try again.'),
+    onError: () =>
+      showToast.error('Could not update your like. Please try again.'),
   });
 
   const liked = likeData?.data?.liked ?? false;

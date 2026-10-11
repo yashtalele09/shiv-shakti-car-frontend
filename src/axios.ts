@@ -1,10 +1,10 @@
 import axios, { AxiosError } from 'axios';
 import type { AxiosInstance } from 'axios';
-import { toast } from 'react-toastify';
 
 import { useLoaderStore } from './stores/useLoaderStore';
 import type { APIFailureData } from './typs/shared';
 import { getAuthToken } from './helper/auth'; // ← changed: removed TOKEN_KEY, added getAuthToken
+import { showToast } from './utils/toast';
 
 const baseURL = import.meta.env.VITE_APP_API_URL;
 
@@ -37,7 +37,7 @@ authInstance.interceptors.response.use(
     useLoaderStore.getState().decrementLoading();
 
     if (!error.response) {
-      toast.error(
+      showToast.error(
         error.message || 'Network error. Please check your connection.'
       );
       return Promise.reject(error);
@@ -46,7 +46,7 @@ authInstance.interceptors.response.use(
     const status = error.response.status;
 
     if (status === 403) {
-      toast.error("You don't have permission to perform this action.");
+      showToast.error("You don't have permission to perform this action.");
       return Promise.reject(error);
     }
 
@@ -91,7 +91,7 @@ instance.interceptors.response.use(
     useLoaderStore.getState().decrementLoading();
 
     if (!error.response) {
-      toast.error(
+      showToast.error(
         error.message || 'Network error. Please check your connection.'
       );
       return Promise.reject(error);

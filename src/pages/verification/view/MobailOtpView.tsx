@@ -4,13 +4,13 @@ import type { KeyboardEvent, ClipboardEvent } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { toast } from 'react-toastify';
 import { ROUTES } from '../../../constants/routes';
 import OtpForm from '../components/OtpForm';
 import { OtpSchema } from '../schema';
 import type { OtpFormData } from '../types';
 import { useVerifyOtpMutation } from '../hooks/useVerifyOtpMutation';
 import { useResendOtpMutation } from '../hooks/useResendOtpMutation';
+import { showToast } from '../../../utils/toast';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const OTP_LENGTH = 6;
@@ -53,24 +53,24 @@ const MobileOtpView = () => {
   // ── Mutations ─────────────────────────────────────────────────────────────
   const { mutate: verifyOtp, isPending: isSubmitting } = useVerifyOtpMutation({
     onSuccess: () => {
-      toast.success('Email verified successfully!');
+      showToast.success('Email verified successfully!');
       navigate(ROUTES.AUTH.SIGN_IN);
     },
     onError: (error) => {
-      toast.error(error.message || 'Invalid code. Please try again.');
+      showToast.error(error.message || 'Invalid code. Please try again.');
     },
   });
 
   const { mutate: resendOtp, isPending: resending } = useResendOtpMutation({
     onSuccess: () => {
-      toast.success('A new code has been sent.');
+      showToast.success('A new code has been sent.');
       setDigits(Array(OTP_LENGTH).fill(''));
       setValue('otp', '');
       setTimer(RESEND_SECONDS);
       inputRefs.current[0]?.focus();
     },
     onError: (error) => {
-      toast.error(error.message || 'Could not resend. Try again.');
+      showToast.error(error.message || 'Could not resend. Try again.');
     },
   });
 

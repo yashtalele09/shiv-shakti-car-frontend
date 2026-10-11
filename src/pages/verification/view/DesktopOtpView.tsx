@@ -4,13 +4,13 @@ import type { KeyboardEvent, ClipboardEvent } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { toast } from 'react-toastify';
 import { ROUTES } from '../../../constants/routes';
 import { OtpSchema } from '../schema';
 import type { OtpFormData } from '../types';
 import { useVerifyOtpMutation } from '../hooks/useVerifyOtpMutation';
 import { useResendOtpMutation } from '../hooks/useResendOtpMutation';
 import LeftSideShow from '../../../components/auth-components/LeftSideShow';
+import { showToast } from '../../../utils/toast';
 
 // Brand accent — matches DesktopSignUpView so the two screens read as one flow.
 const ACCENT = '#6B5BE6';
@@ -62,14 +62,14 @@ const DesktopOtpView = () => {
 
   const { mutate: resendOtp, isPending: resending } = useResendOtpMutation({
     onSuccess: () => {
-      toast.success('A new code has been sent.');
+      showToast.success('A new code has been sent.');
       setDigits(Array(OTP_LENGTH).fill(''));
       setValue('otp', '');
       setTimer(RESEND_SECONDS);
       inputRefs.current[0]?.focus();
     },
     onError: (error) => {
-      toast.error(error.message || 'Could not resend. Try again.');
+      showToast.error(error.message || 'Could not resend. Try again.');
     },
   });
 

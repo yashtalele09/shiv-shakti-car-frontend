@@ -6,10 +6,10 @@ import { SignUpSchema } from '../schema';
 import type { SignUpFormData } from '../schema';
 import { useSignUpMutation } from '../hooks/useSignUpMutation';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { ROUTES } from '../../../../constants/routes';
 import { motion, type Variants } from 'framer-motion';
 import { useState } from 'react';
+import { showToast } from '../../../../utils/toast';
 
 const fields: {
   name: keyof SignUpFormData;
@@ -92,7 +92,7 @@ const MobileSignUpView = () => {
           email: form.getValues('email'),
         },
       });
-      toast.success('Registration successful!');
+      showToast.success('Registration successful!');
     },
   });
 

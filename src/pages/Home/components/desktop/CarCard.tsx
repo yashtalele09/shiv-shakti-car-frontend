@@ -15,13 +15,13 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import type { VehicleDataT } from '../../../../typs/vehicle/get';
 import type { LikeStateT } from '../../../../typs/like/like';
 import { brands } from '../../constants';
 import { formatPrice } from '../../../../helper/format';
 import useToggleLike from '../../../../hooks/useVehicleLikes';
 import useGetLikeStatus from '../../../../hooks/useGetVehicleLike';
+import { showToast } from '../../../../utils/toast';
 
 interface CarCardProps {
   vehicleData: VehicleDataT;
@@ -145,7 +145,8 @@ const CarCard = ({
   );
 
   const { mutate: toggleLike, isPending: isLikePending } = useToggleLike({
-    onError: () => toast.error('Could not update your like. Please try again.'),
+    onError: () =>
+      showToast.error('Could not update your like. Please try again.'),
   });
 
   const liked = likeState?.liked ?? likeData?.data?.liked ?? false;
