@@ -21,6 +21,7 @@ import useToggleLike from '../../../../hooks/useVehicleLikes';
 import useGetLikeStatus from '../../../../hooks/useGetVehicleLike';
 import { brands } from '../../constants';
 import { formatPrice } from '../../../../helper/format';
+import { showToast } from '../../../../utils/toast';
 
 interface CarCardProps {
   vehicleData: VehicleDataT;
@@ -132,6 +133,7 @@ const CarCard = ({
   const [currentImage, setCurrentImage] = useState(0);
   const [likeAnim, setLikeAnim] = useState(false);
   const [imgError, setImgError] = useState<Record<number, boolean>>({});
+  const isLoggedIn = Boolean(localStorage.getItem('token'));
 
   const navigate = useNavigate();
   const vehicleId = vehicleData?.vehicle_id;
@@ -171,6 +173,13 @@ const CarCard = ({
   const handleLike = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!vehicleId || isLikePending) return;
+
+    if (!isLoggedIn) {
+      showToast.error('Please sign in to like a vehicle'); // use showToast.info if you have it
+      navigate('/sign-in'); // change to your sign-in route
+      return;
+    }
+
     toggleLike({ vehicleId });
     setLikeAnim(true);
     setTimeout(() => setLikeAnim(false), 400);

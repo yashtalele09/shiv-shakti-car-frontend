@@ -1,46 +1,36 @@
-import { instance } from '../../axios';
-import { getSessionId } from '../../utils/session'; // adjust to where your function lives
+import { authInstance } from '../../axios';
 import type {
   GetBulkLikesInputT,
   GetLikeStatusInputT,
   ToggleLikeInputT,
 } from '../../typs/like/like';
 
-const guestHeaders = () => ({ 'x-guest-id': getSessionId() });
-
 const likeService = {
   toggleLike: async (data: ToggleLikeInputT) => {
-    const response = await instance.post(
+    const response = await authInstance.post(
       '/like/toggle-like',
       {},
-      {
-        params: { vehicleId: data.vehicleId },
-        headers: guestHeaders(),
-      }
+      { params: { vehicleId: data.vehicleId } }
     );
     return response.data;
   },
 
   getLikeStatus: async (data: GetLikeStatusInputT) => {
-    const response = await instance.get('/like/get-like', {
+    const response = await authInstance.get('/like/get-like', {
       params: { vehicleId: data.vehicleId },
-      headers: guestHeaders(),
     });
     return response.data;
   },
 
   getBulkLikes: async (data: GetBulkLikesInputT) => {
-    const response = await instance.get('/like/get-bulk-likes', {
+    const response = await authInstance.get('/like/get-bulk-likes', {
       params: { ids: data.vehicleIds.join(',') },
-      headers: guestHeaders(),
     });
     return response.data;
   },
 
   getMyLikes: async () => {
-    const response = await instance.get('/like/my-likes', {
-      headers: guestHeaders(),
-    });
+    const response = await authInstance.get('/like/my-likes');
     return response.data;
   },
 };

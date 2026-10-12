@@ -136,6 +136,7 @@ const CarCard = ({
 
   const navigate = useNavigate();
   const vehicleId = vehicleData?.vehicle_id;
+  const isLoggedIn = Boolean(localStorage.getItem('token'));
 
   // ── Likes ───────────────────────────────────────────────────────────────────
   // Skip the per-card request when the parent supplies likes in bulk
@@ -169,10 +170,16 @@ const CarCard = ({
     }
   }, [images.length, currentImage]);
 
-  // ── Handlers ────────────────────────────────────────────────────────────────
   const handleLike = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!vehicleId || isLikePending) return;
+
+    if (!isLoggedIn) {
+      showToast.error('Please sign in to like a vehicle'); // use showToast.info if you have it
+      navigate('/sign-in'); // change to your sign-in route
+      return;
+    }
+
     toggleLike({ vehicleId });
     setLikeAnim(true);
     setTimeout(() => setLikeAnim(false), 400);

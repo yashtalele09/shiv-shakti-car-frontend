@@ -73,6 +73,7 @@ const CarCard = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loadedMap, setLoadedMap] = useState<Record<number, boolean>>({});
   const navigate = useNavigate();
+  const isLoggedIn = Boolean(localStorage.getItem('token'));
 
   // ── Likes ───────────────────────────────────────────────────────────────────
   // Skip the per-card request when the parent supplies likes in bulk
@@ -90,9 +91,15 @@ const CarCard = ({
   const handleLike = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!vehicle_id || isLikePending) return;
+
+    if (!isLoggedIn) {
+      toast.info('Please sign in to like a vehicle');
+      navigate('/sign-in');
+      return;
+    }
+
     toggleLike({ vehicleId: vehicle_id });
   };
-
   const isVideo = (url: string) =>
     url.endsWith('.mp4') || url.endsWith('.webm') || url.endsWith('.ogg');
 

@@ -25,14 +25,10 @@ import { showToast } from '../../../../utils/toast';
 
 interface CarCardProps {
   vehicleData: VehicleDataT;
-  // Pass this when the parent already loaded likes in bulk (useGetBulkLikes)
   likeState?: LikeStateT;
-  // Pass true while the parent's bulk request is still loading, so the card
-  // does not fire its own request in the meantime
   disableLikeFetch?: boolean;
 }
 
-// ─── Helper: detect video by extension ────────────────────────────────────────
 const VIDEO_EXTENSIONS = ['mp4', 'webm', 'ogg', 'mov', 'avi'];
 
 const isVideo = (src: string): boolean => {
@@ -40,7 +36,6 @@ const isVideo = (src: string): boolean => {
   return VIDEO_EXTENSIONS.includes(ext);
 };
 
-// ─── Fallback / Placeholder ────────────────────────────────────────────────────
 const PlaceholderImage = () => (
   <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-[#F1F4F8]">
     <Car size={40} className="text-[#AEB9C7]" />
@@ -50,7 +45,6 @@ const PlaceholderImage = () => (
   </div>
 );
 
-// ─── Media Slide: renders image OR video ──────────────────────────────────────
 interface MediaSlideProps {
   src: string;
   title: string;
@@ -114,7 +108,6 @@ const FeaturedRibbon = () => (
   </div>
 );
 
-// ─── Verified seal badge ────────────────────────────────────────────────────
 const VerifiedSeal = () => (
   <div className="flex items-center gap-1 rounded-full bg-white/95 py-1 pr-2.5 pl-1 shadow-[0_2px_10px_rgba(15,23,42,0.14)] ring-1 ring-[#E7EBF1] backdrop-blur-sm">
     <span className="relative flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-br from-[#1B2F4B] to-[#0F1F35]">
@@ -124,7 +117,6 @@ const VerifiedSeal = () => (
   </div>
 );
 
-// ─── Main Component ───────────────────────────────────────────────────────────
 const CarCard = ({
   vehicleData,
   likeState,
@@ -138,8 +130,8 @@ const CarCard = ({
 
   const vehicleId = vehicleData?.vehicle_id;
 
-  // ── Likes ───────────────────────────────────────────────────────────────────
-  // Skip the per-card request when the parent supplies likes in bulk
+  const isLoggedIn = Boolean(localStorage.getItem('token'));
+
   const { data: likeData } = useGetLikeStatus(
     likeState || disableLikeFetch ? undefined : vehicleId
   );
@@ -152,7 +144,6 @@ const CarCard = ({
   const liked = likeState?.liked ?? likeData?.data?.liked ?? false;
   const likesCount = likeState?.likesCount ?? likeData?.data?.likesCount ?? 0;
 
-  // ── Safe media array (never undefined) ──────────────────────────────────────
   const images: string[] =
     Array.isArray(vehicleData?.vehicle_images_video) &&
     vehicleData.vehicle_images_video.length > 0
@@ -163,22 +154,25 @@ const CarCard = ({
 
   const hasImages = images.length > 0;
 
-  // Reset currentImage if it goes out of bounds (e.g. data changes)
   useEffect(() => {
     if (currentImage >= images.length && images.length > 0) {
       setCurrentImage(0);
     }
   }, [images.length, currentImage]);
 
-  // ── Handlers ────────────────────────────────────────────────────────────────
   const handleLike = () => {
     if (!vehicleId || isLikePending) return;
+
+    if (!isLoggedIn) {
+      showToast.info('Please sign in to like a vehicle');
+      navigate('/sign-in');
+      return;
+    }
 
     toggleLike({ vehicleId });
     setLikeAnim(true);
     setTimeout(() => setLikeAnim(false), 400);
   };
-
   const prev = () =>
     setCurrentImage((i) => (i - 1 + images.length) % images.length);
 

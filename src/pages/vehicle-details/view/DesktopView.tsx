@@ -24,7 +24,7 @@ import {
   Star,
 } from 'lucide-react';
 import useGetVehicleByIdMutation from '../hooks/GetVehicleById';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import ImageLightbox from '../components/mobile/ImagelightBox';
 import ShareSheet from '../components/desktop/Sharesheet';
 import ContactPanel from '../components/desktop/Contactpanel';
@@ -106,8 +106,10 @@ const DesktopVehicleDetails = () => {
 
   const [searchParams] = useSearchParams();
   const id = searchParams.get('vehicle_id');
+  const navigate = useNavigate();
 
   const { mutate: trackAnalytics } = useTrackAnalyticsMutation();
+  const isLoggedIn = Boolean(localStorage.getItem('token'));
 
   // ── Likes ──────────────────────────────────────────────────────────────────
   // Hooks must stay above the early returns below.
@@ -123,9 +125,15 @@ const DesktopVehicleDetails = () => {
 
   const handleLike = () => {
     if (!id || isLikePending) return;
+
+    if (!isLoggedIn) {
+      showToast.error('Please sign in to like a vehicle'); // use showToast.info if you have it
+      navigate('/sign-in'); // change to your sign-in route
+      return;
+    }
+
     toggleLike({ vehicleId: id });
   };
-
   const {
     mutate: fetchVehicle,
     isPending,
