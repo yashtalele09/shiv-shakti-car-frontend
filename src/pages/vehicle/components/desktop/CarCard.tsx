@@ -22,6 +22,7 @@ import useGetLikeStatus from '../../../../hooks/useGetVehicleLike';
 import { brands } from '../../constants';
 import { formatPrice } from '../../../../helper/format';
 import { showToast } from '../../../../utils/toast';
+import { getAuthToken } from '../../../../helper/auth';
 
 interface CarCardProps {
   vehicleData: VehicleDataT;
@@ -136,7 +137,7 @@ const CarCard = ({
 
   const navigate = useNavigate();
   const vehicleId = vehicleData?.vehicle_id;
-  const isLoggedIn = Boolean(localStorage.getItem('token'));
+  const isLoggedIn = Boolean(getAuthToken());
 
   // ── Likes ───────────────────────────────────────────────────────────────────
   // Skip the per-card request when the parent supplies likes in bulk

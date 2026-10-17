@@ -16,6 +16,7 @@ import {
 import type { LikeStateT } from '../../../../typs/like/like';
 import useToggleLike from '../../../../hooks/useVehicleLikes';
 import useGetLikeStatus from '../../../../hooks/useGetVehicleLike';
+import { getAuthToken } from '../../../../helper/auth';
 
 interface CarCardProps {
   vehicle_id: string;
@@ -73,7 +74,7 @@ const CarCard = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loadedMap, setLoadedMap] = useState<Record<number, boolean>>({});
   const navigate = useNavigate();
-  const isLoggedIn = Boolean(localStorage.getItem('token'));
+  const isLoggedIn = Boolean(getAuthToken());
 
   // ── Likes ───────────────────────────────────────────────────────────────────
   // Skip the per-card request when the parent supplies likes in bulk

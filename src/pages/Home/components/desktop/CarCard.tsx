@@ -22,6 +22,7 @@ import { formatPrice } from '../../../../helper/format';
 import useToggleLike from '../../../../hooks/useVehicleLikes';
 import useGetLikeStatus from '../../../../hooks/useGetVehicleLike';
 import { showToast } from '../../../../utils/toast';
+import { getAuthToken } from '../../../../helper/auth';
 
 interface CarCardProps {
   vehicleData: VehicleDataT;
@@ -130,7 +131,7 @@ const CarCard = ({
 
   const vehicleId = vehicleData?.vehicle_id;
 
-  const isLoggedIn = Boolean(localStorage.getItem('token'));
+  const isLoggedIn = Boolean(getAuthToken());
 
   const { data: likeData } = useGetLikeStatus(
     likeState || disableLikeFetch ? undefined : vehicleId

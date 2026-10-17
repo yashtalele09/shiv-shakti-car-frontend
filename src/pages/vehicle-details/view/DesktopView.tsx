@@ -40,6 +40,7 @@ import { getSessionId } from '../../../utils/session';
 import useToggleLike from '../../../hooks/useVehicleLikes';
 import useGetLikeStatus from '../../../hooks/useGetVehicleLike';
 import { showToast } from '../../../utils/toast';
+import { getAuthToken } from '../../../helper/auth';
 
 // ─── constants ────────────────────────────────────────────────────────────────
 
@@ -109,7 +110,7 @@ const DesktopVehicleDetails = () => {
   const navigate = useNavigate();
 
   const { mutate: trackAnalytics } = useTrackAnalyticsMutation();
-  const isLoggedIn = Boolean(localStorage.getItem('token'));
+  const isLoggedIn = Boolean(getAuthToken());
 
   // ── Likes ──────────────────────────────────────────────────────────────────
   // Hooks must stay above the early returns below.

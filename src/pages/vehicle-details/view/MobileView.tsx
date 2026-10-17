@@ -32,6 +32,7 @@ import { getSessionId } from '../../../utils/session';
 import useToggleLike from '../../../hooks/useVehicleLikes';
 import useGetLikeStatus from '../../../hooks/useGetVehicleLike';
 import { showToast } from '../../../utils/toast';
+import { getAuthToken } from '../../../helper/auth';
 
 // ─── fallback images ──────────────────────────────────────────────────────────
 
@@ -53,7 +54,7 @@ const VehicleDetails = () => {
 
   const { mutate: trackAnalytics } = useTrackAnalyticsMutation();
   const navigate = useNavigate();
-  const isLoggedIn = Boolean(localStorage.getItem('token'));
+  const isLoggedIn = Boolean(getAuthToken());
 
   // ── Likes ──────────────────────────────────────────────────────────────────
   // Hooks must stay above the early returns below.

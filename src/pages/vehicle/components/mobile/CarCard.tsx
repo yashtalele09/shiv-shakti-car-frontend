@@ -22,6 +22,7 @@ import useGetLikeStatus from '../../../../hooks/useGetVehicleLike';
 import { brands } from '../../constants';
 import { formatPrice } from '../../../../helper/format';
 import { showToast } from '../../../../utils/toast';
+import { getAuthToken } from '../../../../helper/auth';
 
 interface CarCardProps {
   vehicleData: VehicleDataT;
@@ -133,7 +134,7 @@ const CarCard = ({
   const [currentImage, setCurrentImage] = useState(0);
   const [likeAnim, setLikeAnim] = useState(false);
   const [imgError, setImgError] = useState<Record<number, boolean>>({});
-  const isLoggedIn = Boolean(localStorage.getItem('token'));
+  const isLoggedIn = Boolean(getAuthToken());
 
   const navigate = useNavigate();
   const vehicleId = vehicleData?.vehicle_id;
