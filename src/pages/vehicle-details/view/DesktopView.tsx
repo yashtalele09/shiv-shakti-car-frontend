@@ -41,6 +41,7 @@ import useToggleLike from '../../../hooks/useVehicleLikes';
 import useGetLikeStatus from '../../../hooks/useGetVehicleLike';
 import { showToast } from '../../../utils/toast';
 import { getAuthToken } from '../../../helper/auth';
+import useMyLikes from '../../../hooks/useMyLikes';
 
 // ─── constants ────────────────────────────────────────────────────────────────
 
@@ -121,7 +122,13 @@ const DesktopVehicleDetails = () => {
       showToast.error('Could not update your like. Please try again.'),
   });
 
-  const liked = likeData?.data?.liked ?? false;
+  const { data: myLikedIds } = useMyLikes(); // only fetches when logged in
+
+  // Heart colour: logged-in users only, from the my-likes list
+  const liked =
+    isLoggedIn && id ? (myLikedIds?.has(String(id)) ?? false) : false;
+
+  // Count: visible to everyone
   const likesCount = likeData?.data?.likesCount ?? 0;
 
   const handleLike = () => {

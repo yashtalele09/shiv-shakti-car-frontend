@@ -17,6 +17,7 @@ import type { LikeStateT } from '../../../../typs/like/like';
 import useToggleLike from '../../../../hooks/useVehicleLikes';
 import useGetLikeStatus from '../../../../hooks/useGetVehicleLike';
 import { getAuthToken } from '../../../../helper/auth';
+import useMyLikes from '../../../../hooks/useMyLikes';
 
 interface CarCardProps {
   vehicle_id: string;
@@ -86,7 +87,15 @@ const CarCard = ({
     onError: () => toast.error('Could not update your like. Please try again.'),
   });
 
-  const liked = likeState?.liked ?? likeData?.data?.liked ?? false;
+  const { data: myLikedIds } = useMyLikes(); // only fetches when logged in
+
+  // Heart colour: logged-in users only, from the my-likes list
+  const liked =
+    isLoggedIn && vehicle_id
+      ? (myLikedIds?.has(String(vehicle_id)) ?? false)
+      : false;
+
+  // Count: visible to everyone
   const likesCount = likeState?.likesCount ?? likeData?.data?.likesCount ?? 0;
 
   const handleLike = (e: React.MouseEvent) => {

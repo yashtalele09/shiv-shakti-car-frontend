@@ -23,6 +23,7 @@ import { brands } from '../../constants';
 import { formatPrice } from '../../../../helper/format';
 import { showToast } from '../../../../utils/toast';
 import { getAuthToken } from '../../../../helper/auth';
+import useMyLikes from '../../../../hooks/useMyLikes';
 
 interface CarCardProps {
   vehicleData: VehicleDataT;
@@ -149,8 +150,21 @@ const CarCard = ({
     onError: () => toast.error('Could not update your like. Please try again.'),
   });
 
-  const liked = likeState?.liked ?? likeData?.data?.liked ?? false;
+  const { data: myLikedIds } = useMyLikes(); // only fetches when logged in
+
+  // Heart colour: logged-in users only, from the my-likes list
+  const liked =
+    isLoggedIn && vehicleId
+      ? (myLikedIds?.has(String(vehicleId)) ?? false)
+      : false;
+
+  // Count: visible to everyone
+  // Count: visible to everyone (bulk value first, per-card status as fallback)
   const likesCount = likeState?.likesCount ?? likeData?.data?.likesCount ?? 0;
+
+  useEffect(() => {
+    console.log(likesCount);
+  }, []);
 
   // ── Safe media array (never undefined) ──────────────────────────────────────
   const images: string[] =

@@ -23,6 +23,7 @@ import useToggleLike from '../../../../hooks/useVehicleLikes';
 import useGetLikeStatus from '../../../../hooks/useGetVehicleLike';
 import { showToast } from '../../../../utils/toast';
 import { getAuthToken } from '../../../../helper/auth';
+import useMyLikes from '../../../../hooks/useMyLikes';
 
 interface CarCardProps {
   vehicleData: VehicleDataT;
@@ -133,6 +134,8 @@ const CarCard = ({
 
   const isLoggedIn = Boolean(getAuthToken());
 
+  const { data: myLikedIds } = useMyLikes();
+
   const { data: likeData } = useGetLikeStatus(
     likeState || disableLikeFetch ? undefined : vehicleId
   );
@@ -142,7 +145,10 @@ const CarCard = ({
       showToast.error('Could not update your like. Please try again.'),
   });
 
-  const liked = likeState?.liked ?? likeData?.data?.liked ?? false;
+  const liked =
+    isLoggedIn && vehicleId
+      ? (myLikedIds?.has(String(vehicleId)) ?? false)
+      : false;
   const likesCount = likeState?.likesCount ?? likeData?.data?.likesCount ?? 0;
 
   const images: string[] =
