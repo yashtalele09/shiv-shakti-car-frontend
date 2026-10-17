@@ -21,7 +21,7 @@ const ViewAllCard = ({ total }: { total: number }) => {
 
   return (
     <motion.button
-      onClick={() => navigate('/vehicles')}
+      onClick={() => navigate('/vehicle')}
       whileHover={{ y: -4 }}
       whileTap={{ scale: 0.98 }}
       transition={{ duration: 0.25 }}
