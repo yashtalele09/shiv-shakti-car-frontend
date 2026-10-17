@@ -476,9 +476,9 @@ const VehicleDetails = () => {
         isOpen={contactOpen}
         onClose={() => setContactOpen(false)}
         title={title}
-        email={'shivshakti@gmail.com'}
-        mobileNumber={'7093030403'}
-        whatsappNumber={'7093030403'}
+        email={'shivshakticarbazar@rediffmail.com'}
+        mobileNumber={'+919422279478'}
+        whatsappNumber={'+919422279478'}
       />
     </div>
   );
