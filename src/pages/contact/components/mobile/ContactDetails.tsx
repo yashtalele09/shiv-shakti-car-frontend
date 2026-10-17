@@ -62,14 +62,14 @@ const ContactDetails = () => {
     {
       icon: Phone,
       title: 'Phone Number',
-      value: '+91 82089 63624',
-      link: 'tel:+918208963624',
+      value: '+91 94222 79478',
+      link: 'tel:+919422279478',
     },
     {
       icon: MessageCircle,
       title: 'WhatsApp',
       value: 'Chat with us',
-      link: 'https://wa.me/918208963624',
+      link: 'https://wa.me/919422279478',
     },
   ];
 

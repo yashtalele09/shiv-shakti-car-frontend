@@ -40,20 +40,20 @@ const ContactDetails = () => {
         <ContactRow
           icon={Phone}
           label="Phone"
-          value="+91 82089 63624"
-          link="tel:+918208963624"
+          value="+91 919422279478"
+          link="tel:+91919422279478"
         />
         <ContactRow
           icon={Mail}
           label="Email"
-          value="shivshakticarbazar@gmail.com"
-          link="mailto:shivshakticarbazar@gmail.com"
+          value="shivshakticarbazar@rediffmail.com"
+          link="mailto:shivshakticarbazar@rediffmail.com"
         />
         <ContactRow
           icon={MessageCircle}
           label="WhatsApp"
           value="Chat with us"
-          link="https://wa.me/918208963624"
+          link="https://wa.me/919422279478"
         />
       </div>
     </div>
