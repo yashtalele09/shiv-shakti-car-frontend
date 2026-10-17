@@ -56,8 +56,8 @@ const ContactDetails = () => {
     {
       icon: Mail,
       title: 'Email',
-      value: 'shivshakticarbazar@gmail.com',
-      link: 'mailto:shivshakticarbazar@gmail.com',
+      value: 'shivshakticarbazar@rediffmail.com',
+      link: 'mailto:shivshakticarbazar@rediffmail.com',
     },
     {
       icon: Phone,
