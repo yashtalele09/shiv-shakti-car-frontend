@@ -9,36 +9,41 @@ import {
   Clock,
   ArrowUpRight,
   Car,
-  Send,
+  // Send,
 } from 'lucide-react';
 
 const DesktopFooter = () => {
   const [logoFailed, setLogoFailed] = useState(false);
-  const [email, setEmail] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
+  // const [email, setEmail] = useState('');
+  // const [subscribed, setSubscribed] = useState(false);
 
-  const links = ['Home', 'Browse Cars', 'Sell Your Car', 'About Us'];
-  const services = [
-    'Car Inspection',
-    'Documentation Help',
-    'Loan Assistance',
-    'Doorstep Delivery',
+  const links = [
+    { text: 'Home', href: '/' },
+    { text: 'Browse Cars', href: '/vehicle' },
+    { text: 'Contact Us', href: '/contact' },
+    { text: 'View Services', href: '/#services' },
   ];
-  const legal = ['Privacy Policy', 'Terms of Service', 'Refund Policy'];
+  // const services = [
+  //   'Car Inspection',
+  //   'Documentation Help',
+  //   'Loan Assistance',
+  //   'Doorstep Delivery',
+  // ];
+  // const legal = ['Privacy Policy', 'Terms of Service', 'Refund Policy'];
 
   const contact = [
-    { Icon: Phone, text: '+91 98765 43210', href: 'tel:+919876543210' },
+    { Icon: Phone, text: '+91 +919422279478', href: 'tel:+91+919422279478' },
     {
       Icon: Mail,
-      text: 'shivshakticarbaza@gmail.com',
-      href: 'mailto:shivshakticarbazar@gmail.com',
+      text: 'shivshakticarbazar@rediffmail.com',
+      href: 'mailto:shivshakticarbazar@rediffmail.com',
     },
     {
       Icon: MapPin,
-      text: 'Trimbak Road, Nashik, Maharashtra 422101',
-      href: 'https://maps.google.com/?q=Nashik+Maharashtra',
+      text: '2J37+33J, Jalgaon, Manyar Khede, Maharashtra 425003',
+      href: 'https://maps.google.com/?q=Shiv Shakti Car Bazar+ Manyar Khede +Jalgaon+Maharashtra',
     },
-    { Icon: Clock, text: 'Mon-Sat, 10:00 AM - 8:00 PM', href: null },
+    { Icon: Clock, text: 'Mon-Sat, 9:30 AM - 7:00 PM', href: null },
   ];
 
   const socials = [
@@ -47,18 +52,17 @@ const DesktopFooter = () => {
     { Icon: Twitter, label: 'Twitter', href: '#' },
   ];
 
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email.trim()) return;
-    setSubscribed(true);
-    setEmail('');
-  };
+  // const handleSubscribe = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   if (!email.trim()) return;
+  //   setSubscribed(true);
+  //   setEmail('');
+  // };
 
   return (
     <footer className="hidden w-full bg-linear-to-r from-[#02061D] to-[#002F54] lg:block">
       <div className="h-[3px] w-full bg-gradient-to-r from-indigo-600 via-indigo-400 to-indigo-600" />
-
-      {/* Newsletter strip */}
+      {/* Newsletter strip
       <div className="border-b border-slate-800/80">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-8 px-10 py-8 xl:px-14">
           <div>
@@ -97,8 +101,7 @@ const DesktopFooter = () => {
             </form>
           )}
         </div>
-      </div>
-
+      </div> */}
       <div className="mx-auto max-w-7xl px-10 pt-14 pb-10 xl:px-14">
         <div className="grid grid-cols-[1.6fr_0.8fr_0.8fr_0.8fr_1.2fr] gap-10 xl:gap-14">
           {/* Brand */}
@@ -154,12 +157,12 @@ const DesktopFooter = () => {
             </h3>
             <ul className="flex flex-col gap-3">
               {links.map((l) => (
-                <li key={l}>
+                <li key={l.text}>
                   <a
-                    href="#"
+                    href={l.href}
                     className="group inline-flex items-center gap-1 text-sm text-slate-400 transition-colors duration-150 hover:text-indigo-400"
                   >
-                    {l}
+                    {l.text}
                     <ArrowUpRight
                       size={12}
                       className="opacity-0 transition-opacity duration-150 group-hover:opacity-100"
@@ -172,7 +175,7 @@ const DesktopFooter = () => {
 
           {/* Services */}
           <div>
-            <h3 className="mb-4 text-xs font-semibold tracking-widest text-slate-500 uppercase">
+            {/* <h3 className="mb-4 text-xs font-semibold tracking-widest text-slate-500 uppercase">
               Services
             </h3>
             <ul className="flex flex-col gap-3">
@@ -181,12 +184,12 @@ const DesktopFooter = () => {
                   {s}
                 </li>
               ))}
-            </ul>
+            </ul> */}
           </div>
 
           {/* Legal */}
           <div>
-            <h3 className="mb-4 text-xs font-semibold tracking-widest text-slate-500 uppercase">
+            {/* <h3 className="mb-4 text-xs font-semibold tracking-widest text-slate-500 uppercase">
               Legal
             </h3>
             <ul className="flex flex-col gap-3">
@@ -200,7 +203,7 @@ const DesktopFooter = () => {
                   </a>
                 </li>
               ))}
-            </ul>
+            </ul> */}
           </div>
 
           {/* Contact */}
@@ -255,7 +258,7 @@ const DesktopFooter = () => {
           </p>
           <div className="flex items-center gap-6">
             <span className="text-xs text-slate-600">
-              Made with care in Nashik, Maharashtra
+              Made with care in Jalgaon, Maharashtra
             </span>
           </div>
         </div>

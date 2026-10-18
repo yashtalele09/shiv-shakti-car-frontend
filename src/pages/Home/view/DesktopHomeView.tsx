@@ -61,7 +61,7 @@ const DesktopHomeView = () => {
         <SectionHeading title="Search by Brand" eyebrow="" />
         <BrandButtonsFiltersDesktop />
       </div>
-      <div className="w-full overflow-x-hidden bg-[#F8FAFC] p-5">
+      <div id="services" className="w-full overflow-x-hidden bg-[#F8FAFC] p-5">
         <SectionHeading title="Our Services" eyebrow="" />
         <ServicesSection />
       </div>

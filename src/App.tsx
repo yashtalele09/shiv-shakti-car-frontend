@@ -2,10 +2,12 @@ import AppRoutes from './routes';
 import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ScrollToHash from './hooks/useScrollHash';
 
 const App = () => {
   return (
     <BrowserRouter>
+      <ScrollToHash />
       <ToastContainer
         position="top-center"
         newestOnTop
