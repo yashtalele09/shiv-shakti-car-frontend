@@ -1,7 +1,10 @@
-import { ChevronRight, LogOut } from 'lucide-react';
+import {
+  // ChevronRight,
+  LogOut,
+} from 'lucide-react';
 
 import useAuthStore from '../../../../store/authStore';
-import { mainItems, accountItems } from '../../constants/ProfileMenu';
+// import { mainItems, accountItems } from '../../constants/ProfileMenu';
 
 const ProfileNavigation = () => {
   const logout = useAuthStore((s: any) => s.logout);
@@ -12,7 +15,7 @@ const ProfileNavigation = () => {
         Account
       </p>
 
-      <nav className="space-y-1">
+      {/* <nav className="space-y-1">
         {mainItems.map((item, index) => {
           const Icon = item.icon;
 
@@ -45,11 +48,11 @@ const ProfileNavigation = () => {
             </button>
           );
         })}
-      </nav>
+      </nav> */}
 
       <div className="my-3 border-t border-slate-100" />
 
-      <p className="px-3 pb-2 text-[10px] font-bold tracking-[0.12em] text-slate-400 uppercase">
+      {/* <p className="px-3 pb-2 text-[10px] font-bold tracking-[0.12em] text-slate-400 uppercase">
         Preferences
       </p>
 
@@ -70,7 +73,7 @@ const ProfileNavigation = () => {
             </button>
           );
         })}
-      </nav>
+      </nav> */}
 
       <div className="my-3 border-t border-slate-100" />
 

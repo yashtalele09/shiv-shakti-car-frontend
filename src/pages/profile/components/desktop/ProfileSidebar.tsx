@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion';
 import {
-  CalendarDays,
-  Edit3,
+  // CalendarDays,
+  // Edit3,
   Mail,
-  MapPin,
+  // MapPin,
   Phone,
   ShieldCheck,
 } from 'lucide-react';
@@ -19,7 +19,10 @@ interface Props {
   onEdit: () => void;
 }
 
-const ProfileSidebar = ({ user, onEdit }: Props) => {
+const ProfileSidebar = ({
+  user,
+  // onEdit
+}: Props) => {
   const initials =
     user.name
       ?.split(' ')
@@ -58,13 +61,13 @@ const ProfileSidebar = ({ user, onEdit }: Props) => {
             </div>
           )}
 
-          <button
+          {/* <button
             onClick={onEdit}
             className="mb-1 flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-600 transition hover:bg-slate-50"
           >
             <Edit3 className="h-3 w-3" />
-            Edit
-          </button>
+            Edit */}
+          {/* </button> */}
         </div>
 
         {/* User information */}
@@ -97,7 +100,7 @@ const ProfileSidebar = ({ user, onEdit }: Props) => {
         </div>
 
         {/* Verification */}
-        <div className="mt-5 rounded-xl bg-emerald-50 p-3">
+        {/* <div className="mt-5 rounded-xl bg-emerald-50 p-3">
           <div className="flex items-start gap-2.5">
             <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
 
@@ -111,19 +114,19 @@ const ProfileSidebar = ({ user, onEdit }: Props) => {
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Meta */}
         <div className="mt-4 space-y-2.5 border-t border-slate-100 pt-4">
-          <div className="flex items-center gap-2 text-xs text-slate-400">
+          {/* <div className="flex items-center gap-2 text-xs text-slate-400">
             <MapPin className="h-3.5 w-3.5" />
             <span>India</span>
-          </div>
+          </div> */}
 
-          <div className="flex items-center gap-2 text-xs text-slate-400">
+          {/* <div className="flex items-center gap-2 text-xs text-slate-400">
             <CalendarDays className="h-3.5 w-3.5" />
             <span>Member since 2025</span>
-          </div>
+          </div> */}
         </div>
       </div>
     </motion.div>

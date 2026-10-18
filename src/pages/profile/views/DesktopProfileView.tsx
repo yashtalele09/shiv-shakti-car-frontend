@@ -6,10 +6,10 @@ import useAuthStore from '../../../store/authStore';
 
 import ProfileSidebar from '../components/desktop/ProfileSidebar';
 import ProfileNavigation from '../components/desktop/ProfileNavigation';
-import ProfileStats from '../components/desktop/ProfileStats';
-import RecentlyViewed from '../components/desktop/RecentlyViewed';
-import MyListings from '../components/desktop/MyListings';
-import QuickActions from '../components/desktop/QuickActions';
+// import ProfileStats from '../components/desktop/ProfileStats';
+// import RecentlyViewed from '../components/desktop/RecentlyViewed';
+// import MyListings from '../components/desktop/MyListings';
+// import QuickActions from '../components/desktop/QuickActions';
 
 const ProfileDesktopView = () => {
   const authUser = useAuthStore((s) => s.user);
@@ -52,7 +52,7 @@ const ProfileDesktopView = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#f8fafc]">
+    <div className="mt-10 min-h-screen bg-[#f8fafc]">
       <div className="mx-auto max-w-[1280px] px-6 pt-6 lg:px-8">
         <button
           type="button"
@@ -97,12 +97,12 @@ const ProfileDesktopView = () => {
                 </p>
               </div>
 
-              <ProfileStats />
-              <RecentlyViewed />
+              {/* <ProfileStats /> */}
+              {/* <RecentlyViewed /> */}
 
-              <MyListings />
+              {/* <MyListings /> */}
 
-              <QuickActions />
+              {/* <QuickActions /> */}
             </motion.div>
           </section>
         </div>

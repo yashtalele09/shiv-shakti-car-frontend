@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { LogIn, UserPlus } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { MENU_ITEMS } from '../constants/ProfileMenu';
+// import { MENU_ITEMS } from '../constants/ProfileMenu';ss
 import ProfileHeader from '../components/mobile/ProfileHeader';
-import MenuCard from '../components/mobile/MenuCard';
-import RateUsCard from '../components/mobile/RateUsCard';
+// import MenuCard from '../components/mobile/MenuCard';
+// import RateUsCard from '../components/mobile/RateUsCard';
 import LogoutCard from '../components/mobile/LogOutCard';
 import useAuthStore from '../../../store/authStore';
 import type { User } from '../types/Profile';
@@ -38,7 +38,7 @@ const ProfilePage = () => {
       <div className="mt-6 space-y-3 px-4">
         {user ? (
           <>
-            <MenuCard items={MENU_ITEMS} />
+            {/* <MenuCard items={MENU_ITEMS} /> */}
             {/* <RateUsCard /> */}
             <LogoutCard onLogout={logout} />
           </>
@@ -80,7 +80,7 @@ const ProfilePage = () => {
               </div>
             </motion.div>
 
-            <RateUsCard />
+            {/* <RateUsCard /> */}
           </>
         )}
 
