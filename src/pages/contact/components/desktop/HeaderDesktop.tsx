@@ -17,18 +17,18 @@ const Header = () => {
 
         <div className="flex flex-wrap gap-3">
           <a
-            href="tel:+918208963624"
+            href="tel:+919422279478"
             className="flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm text-white/90 transition-colors hover:border-white/30 hover:text-white"
           >
             <Phone size={15} />
-            +91 82089 63624
+            +919422279478
           </a>
           <a
-            href="mailto:shivshakticarbazar@gmail.com"
+            href="mailto:shivshakticarbazar@rediffmail.com"
             className="flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm text-white/90 transition-colors hover:border-white/30 hover:text-white"
           >
             <Mail size={15} />
-            shivshakticarbazar@gmail.com
+            shivshakticarbazar@rediffmail.com
           </a>
         </div>
       </div>
