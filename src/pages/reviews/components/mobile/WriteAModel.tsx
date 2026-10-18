@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import useAddReviewMutation from '../hooks/useAddReviews';
+import useAddReviewMutation from '../../hooks/useAddReviews';
 
 const RATING_LABELS = ['', 'Poor', 'Fair', 'Good', 'Great', 'Excellent'];
 

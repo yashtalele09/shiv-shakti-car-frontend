@@ -25,7 +25,7 @@ const navItems = [
 ];
 
 // Paths where the header shouldn't render at all
-const HIDDEN_HEADER_PATHS = ['/vehicle-details', '/reviews', '/profile'];
+const HIDDEN_HEADER_PATHS = ['/vehicle-details'];
 
 const isHiddenHeaderPath = (pathname: string) =>
   HIDDEN_HEADER_PATHS.some(
