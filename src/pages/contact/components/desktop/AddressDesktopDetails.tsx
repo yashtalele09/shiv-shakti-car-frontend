@@ -14,7 +14,7 @@ const AddressDetails = () => {
             Bhusawal Road, near Doordarshan Tower, Jalgaon
           </p>
           <a
-            href="https://www.google.com/maps"
+            href="https://maps.google.com/?q=Shiv Shakti Car Bazar+ Manyar Khede +Jalgaon+Maharashtra"
             target="_blank"
             rel="noopener noreferrer"
             className="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-[#C1502E] hover:underline"
