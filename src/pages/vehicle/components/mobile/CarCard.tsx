@@ -162,10 +162,6 @@ const CarCard = ({
   // Count: visible to everyone (bulk value first, per-card status as fallback)
   const likesCount = likeState?.likesCount ?? likeData?.data?.likesCount ?? 0;
 
-  useEffect(() => {
-    console.log(likesCount);
-  }, []);
-
   // ── Safe media array (never undefined) ──────────────────────────────────────
   const images: string[] =
     Array.isArray(vehicleData?.vehicle_images_video) &&

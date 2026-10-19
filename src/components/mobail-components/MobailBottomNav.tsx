@@ -12,11 +12,21 @@ const navItems = [
   { path: '/profile', icon: User, label: 'Profile' },
 ];
 
+// Routes where the bottom nav should NOT be shown
+const hiddenRoutes = ['/vehicle-details'];
+
 const MobileBottomNav = ({ expanded }: MobileBottomNavProps) => {
   const navigate = useNavigate();
   const location = useLocation();
 
   const isActive = (path: string) => location.pathname === path;
+
+  // Hide on vehicle-details (also matches nested/dynamic paths like /vehicle-details/123)
+  const shouldHide = hiddenRoutes.some((route) =>
+    location.pathname.startsWith(route)
+  );
+
+  if (shouldHide) return null;
 
   return (
     <nav

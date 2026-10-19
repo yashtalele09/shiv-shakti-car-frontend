@@ -75,10 +75,6 @@ const VehicleDetails = () => {
   // Count: visible to everyone
   const likesCount = likeData?.data?.likesCount ?? 0;
 
-  useEffect(() => {
-    console.log(likesCount);
-  }, []);
-
   const handleLike = () => {
     if (!id || isLikePending) return;
 
