@@ -12,7 +12,8 @@ const MobileLayout = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [pathname]);
+    setExpanded(!isHomePage);
+  }, [pathname, isHomePage]);
 
   return (
     <div className="flex flex-col">
