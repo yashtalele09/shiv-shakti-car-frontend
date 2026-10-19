@@ -22,7 +22,7 @@ import useGetLikeStatus from '../../../../hooks/useGetVehicleLike';
 import { brands } from '../../constants';
 import { formatPrice } from '../../../../helper/format';
 import { showToast } from '../../../../utils/toast';
-import getAuthToken from '../../../../helper/auth';
+import { getAuthToken } from '../../../../helper/auth';
 import useMyLikes from '../../../../hooks/useMyLikes';
 
 interface CarCardProps {

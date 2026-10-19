@@ -3,7 +3,7 @@ import type { AxiosInstance } from 'axios';
 
 import { useLoaderStore } from './stores/useLoaderStore';
 import type { APIFailureData } from './typs/shared';
-import getAuthToken from './helper/auth'; // ← changed: removed TOKEN_KEY, added getAuthToken
+import { getAuthToken } from './helper/auth'; // ← changed: removed TOKEN_KEY, added getAuthToken
 import { showToast } from './utils/toast';
 
 const baseURL = import.meta.env.VITE_APP_API_URL;
