@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import likeService from '../lib/services/like-service';
-import { getAuthToken } from '../helper/auth';
+import getAuthToken from '../helper/auth';
 
 const useMyLikes = () => {
   const isLoggedIn = Boolean(getAuthToken());

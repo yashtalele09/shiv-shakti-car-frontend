@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import likeService from '../lib/services/like-service';
 import type { ToggleLikeResponseT } from '../typs/like/like';
-import { getAuthToken } from '../helper/auth';
+import getAuthToken from '../helper/auth';
 
 const useGetLikeStatus = (vehicleId?: string) => {
   const isLoggedIn = Boolean(getAuthToken());
