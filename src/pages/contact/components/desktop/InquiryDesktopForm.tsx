@@ -23,6 +23,7 @@ interface InputFieldProps {
   error?: string;
   registration: UseFormRegisterReturn;
   disabled?: boolean;
+  readOnly?: boolean;
   rightSlot?: React.ReactNode;
 }
 
@@ -33,6 +34,7 @@ const InputField = ({
   error,
   registration,
   disabled,
+  readOnly,
   rightSlot,
 }: InputFieldProps) => {
   return (
@@ -49,7 +51,10 @@ const InputField = ({
           type={type}
           placeholder={placeholder}
           disabled={disabled}
-          className="w-full bg-transparent text-sm text-[#1B2333] outline-none placeholder:text-[#9C978A] disabled:text-[#9C978A] md:text-[15px]"
+          readOnly={readOnly}
+          className={`w-full bg-transparent text-sm outline-none placeholder:text-[#9C978A] disabled:text-[#9C978A] md:text-[15px] ${
+            readOnly ? 'text-[#6B6759]' : 'text-[#1B2333]'
+          }`}
           {...registration}
         />
         {rightSlot}
@@ -80,10 +85,11 @@ const InquiryForm = () => {
   const [otpSent, setOtpSent] = useState(false);
   const [emailVerified, setEmailVerified] = useState(false);
   const [otp, setOtp] = useState('');
+  const [otpError, setOtpError] = useState('');
   const [resendTimer, setResendTimer] = useState(0);
 
   const verifiedEmailRef = useRef<string | null>(null);
-  const email = watch('email');
+  const email = (watch('email') || '').trim();
 
   // Reset OTP state if the email is edited after sending/verifying
   useEffect(() => {
@@ -91,6 +97,7 @@ const InquiryForm = () => {
       setEmailVerified(false);
       setOtpSent(false);
       setOtp('');
+      setOtpError('');
       setResendTimer(0);
       verifiedEmailRef.current = null;
     }
@@ -105,10 +112,11 @@ const InquiryForm = () => {
     return () => clearInterval(id);
   }, [resendTimer]);
 
-  const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email || '');
+  const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const handleSendOtp = () => {
     if (!isValidEmail || isSendingOtp) return;
+    setOtpError('');
     sendOtp(
       { email },
       {
@@ -122,14 +130,30 @@ const InquiryForm = () => {
 
   const handleVerifyOtp = () => {
     if (otp.trim().length === 0 || isVerifyingOtp) return;
+    setOtpError('');
     verifyOtp(
       { email, otp },
       {
-        onSuccess: (response) => {
-          if (response.verified) {
+        onSuccess: (response: any) => {
+          // Log once to confirm your backend's response shape, then keep only the right key
+          console.log('verify response:', response);
+
+          const ok =
+            response?.verified ??
+            response?.data?.verified ??
+            response?.success ??
+            response?.data?.success;
+
+          if (ok) {
             setEmailVerified(true);
+            setOtpError('');
             verifiedEmailRef.current = email;
+          } else {
+            setOtpError('Invalid or expired OTP. Please try again.');
           }
+        },
+        onError: () => {
+          setOtpError('Invalid or expired OTP. Please try again.');
         },
       }
     );
@@ -145,6 +169,7 @@ const InquiryForm = () => {
           setOtpSent(false);
           setEmailVerified(false);
           setOtp('');
+          setOtpError('');
           setResendTimer(0);
           verifiedEmailRef.current = null;
         },
@@ -179,7 +204,7 @@ const InquiryForm = () => {
             type="email"
             placeholder="Email address"
             error={errors.email?.message}
-            disabled={emailVerified}
+            readOnly={emailVerified}
             registration={register('email')}
             rightSlot={
               emailVerified ? (
@@ -208,14 +233,23 @@ const InquiryForm = () => {
 
         {otpSent && !emailVerified && (
           <div className="w-full">
-            <div className="flex w-full items-center gap-3 border-b border-[#E4E1D9] py-3 transition-colors focus-within:border-[#C1502E]">
+            <div
+              className={`flex w-full items-center gap-3 border-b py-3 transition-colors ${
+                otpError
+                  ? 'border-red-400'
+                  : 'border-[#E4E1D9] focus-within:border-[#C1502E]'
+              }`}
+            >
               <input
                 type="text"
                 inputMode="numeric"
                 maxLength={6}
                 placeholder="Enter OTP"
                 value={otp}
-                onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                onChange={(e) => {
+                  setOtp(e.target.value.replace(/\D/g, ''));
+                  if (otpError) setOtpError('');
+                }}
                 className="w-full bg-transparent text-sm text-[#1B2333] outline-none placeholder:text-[#9C978A] md:text-[15px]"
               />
               <button
@@ -231,6 +265,9 @@ const InquiryForm = () => {
                 )}
               </button>
             </div>
+            {otpError && (
+              <p className="mt-1 text-xs text-red-500">{otpError}</p>
+            )}
             <div className="mt-1 flex justify-end">
               <button
                 type="button"
