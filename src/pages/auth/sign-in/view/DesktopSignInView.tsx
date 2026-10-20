@@ -7,14 +7,12 @@ import { SignInSchema } from '../schema';
 import type { SignInFormData } from '../schema';
 import type { SignInAPISuccessResponseT } from '../../../../typs/auth/sign-in/post';
 import { useSignInMutation } from '../hooks/useSignInMutation';
-import type { APIFailureData } from '../../../../typs/shared';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../../../constants/routes';
 import { motion, type Variants } from 'framer-motion';
 import useAuthStore from '../../../../store/authStore';
 
 import LeftSideShow from '../../../../components/auth-components/LeftSideShow';
-import { showToast } from '../../../../utils/toast';
 
 // Brand accent — pulled from the page's own gradient so every surface reads as one palette.
 const ACCENT = '#6B5BE6';
@@ -84,11 +82,7 @@ const DesktopSignInView = () => {
         },
         data.token
       );
-      showToast.success('Welcome back! Signed in successfully.');
       navigate(ROUTES.AUTH.HOME);
-    },
-    onError: (error: APIFailureData) => {
-      showToast.error(error?.message || 'Sign in failed. Please try again.');
     },
   });
 

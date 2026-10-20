@@ -9,7 +9,6 @@ import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../../../constants/routes';
 import { motion, type Variants } from 'framer-motion';
 import { useState } from 'react';
-import { showToast } from '../../../../utils/toast';
 
 const fields: {
   name: keyof SignUpFormData;
@@ -92,7 +91,6 @@ const MobileSignUpView = () => {
           email: form.getValues('email'),
         },
       });
-      showToast.success('Registration successful!');
     },
   });
 
