@@ -3,8 +3,10 @@ import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ScrollToHash from './hooks/useScrollHash';
+import useSessionWatcher from './hooks/useSessionWatcher';
 
 const App = () => {
+  useSessionWatcher();
   return (
     <BrowserRouter>
       <ScrollToHash />
